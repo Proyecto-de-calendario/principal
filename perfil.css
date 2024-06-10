@@ -1,0 +1,10 @@
+main {
+    min-width: 60vh;
+    display :flex ;
+    flex-direction: column;
+    color: whitesmoke;
+    justify-content: center;
+}
+#boton {
+    justify-self: flex-end;
+}

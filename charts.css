@@ -1,0 +1,9 @@
+
+.chartBox {
+    width: 900px;
+    padding: 10px;
+    border-radius: 20px;
+    background: white;
+    justify-content: center;
+    align-items: center;
+}
