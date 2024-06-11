@@ -319,11 +319,14 @@ body{
   background: #fff;
   border-radius: 10px;
 }
-main {
+h5 {
     color: whitesmoke;
     height: 100%;
-   padding-top: 100px; 
+    padding: 10px;
+    font-size: medium;
 }
 #boton {
     width: 200px;
+    height: 50px;
+    font-size: larger;
 }
