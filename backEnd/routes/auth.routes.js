@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { connectDB } = require('../db/database');
+const { connectDB } = require('../backEnd/bd.js');
 
 const validarJWT = async (token) => {
 
