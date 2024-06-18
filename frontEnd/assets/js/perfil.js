@@ -1,21 +1,21 @@
-function actualizar() {
-let actualizarPerfil = document.getElementById("actualizar-perfil");
-actualizarPerfil.addEventListener("btn")
-}
+const conectarBd = require("../../../backEnd/bd");
+
+const conexion = conectarBd()
+
 function actualizarPerfil() {
-    let formulario = document.getElementById("formulario");
-    
-      formulario.addEventListener("submit", function(event) {
-        event.preventDefault();
+  let formulario = document.getElementById("formulario");
 
-        let nuevoNombre = document.getElementById("nombre").value;
-        let nuevoEmail = document.getElementById("email").value;
-        let nuevaedad = document.getElementById("edad").value;
+  formulario.addEventListener("submit", function(event) {
+      event.preventDefault();
 
-        localStorage.setItem("nombre", nuevoNombre);
-        localStorage.setItem("email", nuevoEmail);
-        localStorage.setItem("edad", nuevaedad);
+      let nuevoNombre = document.getElementById("nombre").value;
+      let nuevoEmail = document.getElementById("email").value;
+      let nuevaEdad = document.getElementById("edad").value;
 
-        console.log("¡Datos guardados!");
-    })
-  }
+      localStorage.setItem("nombre", nuevoNombre);
+      localStorage.setItem("email", nuevoEmail);
+      localStorage.setItem("edad", nuevaEdad);
+
+      console.log("¡Datos guardados!");
+  });
+}
