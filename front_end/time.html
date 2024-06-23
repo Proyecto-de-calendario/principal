@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/timer.css">
+    <title>FreeHealth</title>
+</head>
+<body>
+    <div class ="sidebar">
+        <ul>
+          <li class="logo" style="--bg:#333;">
+            <a href="#">
+              <div class="icon"><ion-icon name="heart-circle-outline"></ion-icon></div>
+              <div class="text">FreeHealth</div>
+            </a>
+          </li>
+          <div class="Menulist">
+            <li style="--bg:#ffa117;">
+              <a href="index.html">
+                <div class="icon"><ion-icon name="bar-chart-outline"></ion-icon></ion-icon></div>
+                <div class="text">Panel de Control</div>
+              </a>
+            </li>
+            <li style="--bg:#e41414;" class="active">
+              <a href="#">
+                <div class="icon"><ion-icon name="timer-outline"></ion-icon></div>
+                <div class="text">Limite de tiempo</div>
+              </a>
+            </li>
+            <li style="--bg:#45f11a;">
+              <a href="agenda.html">
+                <div class="icon"><ion-icon name="calendar-outline"></ion-icon></div>
+                <div class="text">Agenda</div>
+              </a>
+            </li>
+            <li style="--bg:#18d4f5;">
+              <a href="about.html">
+                <div class="icon"><ion-icon name="people-outline"></ion-icon></div>
+                <div class="text">Nosotros</div>
+              </a>
+            </li>
+          </div>
+          <div class="bottom">
+            <li style="--bg:#333;">
+              <a href="#">
+                <div class="icon">
+                  <div class="imgBx">
+                    <img src="imagenes/pexels-pixabay-415829.jpg">
+                  </div>
+                </div>
+                <div class="text">Jane Clover</div>
+              </a>
+            </li>
+            <li style="--bg:#333;">
+              <a href="login.html">
+                <div class="icon"><ion-icon name="log-out-outline"></ion-icon></div>
+                <div class="text">Salir</div>
+              </a>
+            </li>
+          </div>
+        </ul>
+      </div>
+      <div class="header">
+        <div class="menuToggle"></div>
+        <div class="nameSection">
+            <h1>Limite de tiempo</h1>
+        </div>
+        <div class="mainConteiner">
+
+        </div>
+      </div>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+      let menuToggle = document.querySelector('.menuToggle');
+      let sidebar = document.querySelector('.sidebar');
+      let main = document.querySelector('.mainConteiner');
+      let header = document.querySelector('.header');
+
+      menuToggle.onclick = function(){
+        menuToggle.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        main.classList.toggle('active');
+        header.classList.toggle('active');
+      }
+
+      let Menulist = document.querySelectorAll('.Menulist li');
+      function activeLink(){
+        Menulist.forEach((item) => 
+        item.classList.remove('active')); 
+        this.classList.add('active');
+      }
+      Menulist.forEach((item)=> 
+      item.addEventListener('click',activeLink));
+    </script>
+</body>
+</html>

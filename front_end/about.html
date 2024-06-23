@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/ourServices.css">
+    <title>FreeHealth</title>
+</head>
+<body>
+    <div class ="sidebar">
+        <ul>
+          <li class="logo" style="--bg:#333;">
+            <a href="#">
+              <div class="icon"><ion-icon name="heart-circle-outline"></ion-icon></div>
+              <div class="text">FreeHealth</div>
+            </a>
+          </li>
+          <div class="Menulist">
+            <li style="--bg:#ffa117;">
+              <a href="index.html">
+                <div class="icon"><ion-icon name="bar-chart-outline"></ion-icon></ion-icon></div>
+                <div class="text">Panel de Control</div>
+              </a>
+            </li>
+            <li style="--bg:#e41414;">
+              <a href="time.html">
+                <div class="icon"><ion-icon name="timer-outline"></ion-icon></div>
+                <div class="text">Limite de tiempo</div>
+              </a>
+            </li>
+            <li style="--bg:#45f11a;">
+              <a href="agenda.html">
+                <div class="icon"><ion-icon name="calendar-outline"></ion-icon></div>
+                <div class="text">Agenda</div>
+              </a>
+            </li>
+            <li style="--bg:#18d4f5;" class="active">
+              <a href="#">
+                <div class="icon"><ion-icon name="people-outline"></ion-icon></div>
+                <div class="text">Nosotros</div>
+              </a>
+            </li>
+          </div>
+          <div class="bottom">
+            <li style="--bg:#333;">
+              <a href="#">
+                <div class="icon">
+                  <div class="imgBx">
+                    <img src="imagenes/pexels-pixabay-415829.jpg">
+                  </div>
+                </div>
+                <div class="text">Jane Clover</div>
+              </a>
+            </li>
+            <li style="--bg:#333;">
+              <a href="login.html">
+                <div class="icon"><ion-icon name="log-out-outline"></ion-icon></div>
+                <div class="text">Salir</div>
+              </a>
+            </li>
+          </div>
+        </ul>
+      </div>
+      <div class="header">
+        <div class="menuToggle"></div>
+        <div class="nameSection">
+            <h1>¡Bienvenidos!</h1>
+        </div>
+        <div class="mainConteiner">
+            <h3>Sobre Nosotros</h3>
+            <div class="about">
+                <div class="aboutmain">
+                    <img src="https://www.lechepuleva.es/documents/13930/1397816/buena-convivencia.jpg/9c262394-9bb9-4334-90f8-51385f7d0c9b?t=1461929232259">
+                    <div class="about-text">
+                        <h1>FreeHealth</h1>
+                        <h5>Salud <span> y Bienestar digital</span></h5>
+                        <p>Freehealth es un pagina web especializadas para aquellos que tienen mucha dependencia hacia las redes sociales y su falta de control en estas. nos enfocamos en que el usuario pueda mantener la concentracion en sus quehaceres, responsabilidades, educacion y compromiso en su entorno y relaciones personales. Freehealth tambien esta enfocada en bienestar digital de nuestros usuarios y le damos los suficientes herramientas para que el usuario pueda mantener su enfoque en su vida personal y utilizar de mejorar manera las paginas web</p>
+                        <button type="button">Descubre mas</button>
+                    </div>
+                </div>
+            </div>
+            <h3>Nuestros Servicios</h3>
+            <div class="services">
+                <div class="content">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-bar-chart"></i>
+                                <h4>Panel de Control</h4>
+                                <p>Utiliza nuestro panel de control para poder ver la cantidad de uso que le estas dando a tus dispositivos en las paginas web</p>
+                                <a href="index.html">Descubrelo</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-clock-o"></i>
+                                <h4>Limite de tiempo</h4>
+                                <p>Utiliza nuestro limite de tiempo para poder cargar la cantidad de tiempo que deseas ponerlo en cada pagina web y asi mantenerte vigente</p>
+                                <a href="time.html">Descubrelo</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-calendar-check-o"></i>
+                                <h4>Agenda Digital</h4>
+                                <p>Utiliza nuestra agenda digital para poder añadir tus tareas importantes y mantenerte enfocado en lo que haces</p>
+                                <a href="agenda.html">Descubrelo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+      let menuToggle = document.querySelector('.menuToggle');
+      let sidebar = document.querySelector('.sidebar');
+      let main = document.querySelector('.mainConteiner');
+      let header = document.querySelector('.header');
+
+      menuToggle.onclick = function(){
+        menuToggle.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        main.classList.toggle('active');
+        header.classList.toggle('active');
+      }
+
+      let Menulist = document.querySelectorAll('.Menulist li');
+      function activeLink(){
+        Menulist.forEach((item) => 
+        item.classList.remove('active')); 
+        this.classList.add('active');
+      }
+      Menulist.forEach((item)=> 
+      item.addEventListener('click',activeLink));
+    </script>
+</body>
+</html>
