@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/calenstyle.css" />
     <link rel="stylesheet" href="css/calendary.css">
+    <link rel="stylesheet" href="css/task.css">
     <title>FreeHealth</title>
 </head>
 <body>
@@ -95,15 +96,44 @@
                 <ul class="days"></ul>
               </div>
             </div>
-            <div class="agenda-section">
-              <!-- Contenedor de la agenda semanal -->
-              <div id="calendar" class="calendar"></div>
-              <div id="calendar"></div>
+            <hr>
+            <h3>Lista de tareas</h3>
+            <hr>
+            <div class="agenda-container">
+              <h1>Agenda</h1>
+              <button id="open-modal">Añadir Tarea</button>
               <div id="task-list">
-                <h3>Tareas</h3>
-                <ul id="task-list-items"></ul>
+                  <h2>Tareas</h2>
               </div>
-            </div>
+          </div>
+          <div id="task-modal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <form id="task-form">
+                      <input type="hidden" id="task-id">
+                      <label for="task-date">Fecha:</label>
+                      <input type="date" id="task-date" required>
+                      <br>
+                      <label for="task-time-start">Hora de Inicio:</label>
+                      <input type="time" id="task-time-start" required>
+                      <br>
+                      <label for="task-time-end">Hora de Fin:</label>
+                      <input type="time" id="task-time-end" required>
+                      <br>
+                      <label for="task-name">Tarea:</label>
+                      <input type="text" id="task-name" required>
+                      <br>
+                      <label for="task-priority">Prioridad:</label>
+                      <select id="task-priority" required>
+                          <option value="alta">Alta</option>
+                          <option value="media">Media</option>
+                          <option value="baja">Baja</option>
+                      </select>
+                      <br>
+                      <button type="submit" style="width: 355px;">Guardar Tarea</button>
+                  </form>
+              </div>
+          </div>      
         </div>
         <script src="javascript/script.js"></script>
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -130,5 +160,6 @@
       Menulist.forEach((item)=> 
       item.addEventListener('click',activeLink));
     </script>
+    <script src="javascript/agenda.js"></script>
 </body>
 </html>
