@@ -41,4 +41,4 @@ const login = async (e) => {
 }
 
 // Añadimos el evento submit al formulario.
-form.addEventListener('submit', login
+form.addEventListener('submit', login)

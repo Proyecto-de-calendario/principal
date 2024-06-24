@@ -12,9 +12,9 @@ app.use(morgan('dev')); // morgan para mostrar informacion acerca de las peticio
 app.use(express.json()); // express.json para que nuestro servidor pueda reconocer los json que recibimos por el body.
 
 //Requerimos nuestras rutas.
-app.use(require('./routes/auth.routes'));
-app.use(require('./routes/tareas.routes'));
-app.use(require('./routes/usuarios.routes'));
+app.use(require('../routes/auth.routes'));
+app.use(require('../routes/tareas.routes'));
+app.use(require('../routes/usuarios.routes'));
 
 //Configuramos el puerto al que escuchara nuestro servidor.
 app.listen(3000, () => { 
