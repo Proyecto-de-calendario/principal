@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="agenda-container">
+        <h1>Agenda</h1>
+        <form id="task-form">
+            <input type="hidden" id="task-id">
+            <label for="task-date">Fecha:</label>
+            <input type="date" id="task-date" required>
+            <br>
+            <label for="task-time">Hora:</label>
+            <input type="time" id="task-time" required>
+            <br>
+            <label for="task-name">Tarea:</label>
+            <input type="text" id="task-name" required>
+            <br>
+            <label for="task-priority">Prioridad:</label>
+            <select id="task-priority" required>
+                <option value="high">Alta</option>
+                <option value="medium">Media</option>
+                <option value="low">Baja</option>
+            </select>
+            <br>
+            <button type="submit">Guardar Tarea</button>
+        </form>
+        <h2>Tareas</h2>
+        <div id="task-list">
+            <!-- Las tareas se agregarán aquí -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
