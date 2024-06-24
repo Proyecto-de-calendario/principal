@@ -51,7 +51,7 @@ body{
 .mainConteiner h3 {
   background-color:white; 
   color: black; 
-  width: 900px; 
+  width: 600px; 
   text-align: center; 
   display: flex;
   justify-content: center;
@@ -224,7 +224,7 @@ body{
 }
 
 .nameSection h1 {
-  background: #e41414;
+  background: #333;
   color: #fff;
   width: 500px;
   text-align: center;
@@ -234,7 +234,7 @@ body{
 
 .nameSection h1:hover{
   background: #fff;
-  color: #e41414;
+  color: #333;
   transition: 0.5s;
 }
 
