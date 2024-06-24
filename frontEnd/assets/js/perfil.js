@@ -1,4 +1,4 @@
-const conectarBd = require("../../../backEnd/bd");
+const conectarBd = require("./backEnd/bd");
 
 const conexion = conectarBd()
 
