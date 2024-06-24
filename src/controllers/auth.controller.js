@@ -1,4 +1,4 @@
-const { connectarBd } = require("../bd");
+const { connectDB } = require("../baseDeDatos");
 const bcrypt = require('bcrypt');
 const generarJWT = require("../helpers/generarJWT");
 
@@ -9,19 +9,19 @@ const ctrl = {};
 ctrl.register = async (req, res) =>{
 
     // Desestructuramos los datos que vienen del cuerpo de la peticion.
-    const { usuario, correo, contrasenia } = req.body;
+    const { nombre, apellido, usuario, correo, contrasenia } = req.body;
 
     //Hacemos la conexion a la base de datos.
-    const connection = await connectarBd();
+    const connection = await connectDB();
 
     // Creamos la consulta.
-    const sql = 'INSERT INTO USUARIOS (idUsuario, emailUsuario, contraseñaUsuario) VALUES (?,?,?)';
+    const sql = 'INSERT INTO USUARIOS (nombre, apellido, usuario, correo, contrasenia) VALUES (?,?,?,?,?)';
 
     // Encriptamos la contraseña utilizando la libreria bcrypt.
     const hashContrasenia = bcrypt.hashSync(contrasenia, 10); // El segundo parametro es el numero de veces que se ejecuta el algoritmo de encriptación.
 
     // Ejecutamos la consulta.
-    await connection.query(sql, [usuario, correo, hashContrasenia]);
+    await connection.query(sql, [nombre, apellido, usuario, correo, hashContrasenia]);
 
     // Respondemos a nuestro cliente
     res.json({
@@ -33,10 +33,10 @@ ctrl.login = async (req, res) => {
 
     const { usuario, contrasenia } = req.body;
 
-    const connection = await connectarBd();
+    const connection = await connectDB();
 
     // Buscamos el usuario en la bd.
-    const sql = 'SELECT * FROM USUARIOS WHERE idUSUARIO=? LIMIT 1';
+    const sql = 'SELECT * FROM USUARIOS WHERE USUARIO=? LIMIT 1';
 
     const [buscarUsuario] = await connection.query(sql, usuario);
     

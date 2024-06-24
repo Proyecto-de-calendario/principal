@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { connectarBd } = require('../bd');
+const { connectDB } = require('../baseDeDatos');
 
 const validarJWT = async (token) => {
 
@@ -8,7 +8,7 @@ const validarJWT = async (token) => {
         // El primer parametro es el token que recibimos por el header, y el segun el secret con el que firmamos el token.
         const { id } = jwt.verify(token, 'mysecret');
 
-        const connection = await connectarBd();
+        const connection = await connectDB();
 
         // Buscamos el usuario por id.
         const [usuario] = await connection.query('SELECT * FROM USUARIOS WHERE id=? LIMIT 1', id);
