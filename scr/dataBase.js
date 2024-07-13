@@ -5,6 +5,7 @@ const mysql = require('mysql2/promise');
 const connectDB = async ()=> {
     return await mysql.createConnection({
         host: 'localhost',
+        port: 3306,
         user: 'root',
         password: '',
         database: 'proyecto_calendario'
@@ -12,6 +13,4 @@ const connectDB = async ()=> {
 }
 
 // Exportamos la funcion para realizar la conexion desde cualquier archivo.
-module.exports = {
-    connectDB
-}
+module.exports = connectDB
