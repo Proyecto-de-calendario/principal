@@ -8,13 +8,13 @@ const login = async (e) => {
     e.preventDefault();
 
     // Tomamos los valores de los inputs.
-    const usuario = document.getElementById('usuario').value;
+    const email = document.getElementById('usuario').value;
     const contrasenia = document.getElementById('contrasenia').value;
     
     // Realizamos la peticion a nuestro servidor.
-    const peticion = await fetch('http://localhost:3000/login', {
+    const peticion = await fetch('http://localhost:3000/users', {
         method: 'POST',
-        body: JSON.stringify({usuario, contrasenia}),
+        body: JSON.stringify({email, contrasenia}),
         headers: {
             'Content-type': 'application/json'
         }
