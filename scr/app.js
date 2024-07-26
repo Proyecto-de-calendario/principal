@@ -1,5 +1,4 @@
 const express = require('express');
-const connectDB = require('./dataBase'); 
 
 const app = express();
 app.use(express.json()); 
@@ -10,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 const userRouter = require('./routes/usuarios.Routes');
 const taskRouter = require('./routes/tareas.Routes'); 
 
-app.use('/usuarios', userRouter);
-app.use('/tareas', taskRouter);
+app.use('/users', userRouter);
+app.use('/tasks', taskRouter);
 
 
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
