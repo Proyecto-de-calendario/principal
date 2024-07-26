@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font Link for Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/calenstyle.css" />
-    <link rel="stylesheet" href="assets/css/calendary.css">
-    <link rel="stylesheet" href="assets/css/task.css">
+    <link rel="stylesheet" href="assets/css/about.css">
+    <link rel="stylesheet" href="assets/css/ourServices.css">
     <title>FreeHealth</title>
 </head>
 <body>
@@ -34,16 +31,16 @@
                 <div class="text">Limite de tiempo</div>
               </a>
             </li>
-            <li style="--bg:#45f11a;" class="active">
-              <a href="#">
+            <li style="--bg:#45f11a;">
+              <a href="agenda.html">
                 <div class="icon"><ion-icon name="calendar-outline"></ion-icon></div>
                 <div class="text">Agenda</div>
               </a>
             </li>
-            <li style="--bg:#18d4f5;">
-              <a href="about.html">
+            <li style="--bg:#18d4f5;" class="active">
+              <a href="#">
                 <div class="icon"><ion-icon name="people-outline"></ion-icon></div>
-                <div class="text">Nosostros</div>
+                <div class="text">Nosotros</div>
               </a>
             </li>
           </div>
@@ -70,72 +67,54 @@
       <div class="header">
         <div class="menuToggle"></div>
         <div class="nameSection">
-            <h1>Agenda</h1>
+            <h1>¡Bienvenidos!</h1>
         </div>
         <div class="mainConteiner">
-            <h3>Calendario</h3>
-            <hr>
-            <div class="wrapper">
-              <header>
-                <p class="current-date"></p>
-                <div class="icons">
-                  <span id="prev" class="material-symbols-rounded">chevron_left</span>
-                  <span id="next" class="material-symbols-rounded">chevron_right</span>
+            <h3>Sobre Nosotros</h3>
+            <div class="about">
+                <div class="aboutmain">
+                    <img src="https://www.lechepuleva.es/documents/13930/1397816/buena-convivencia.jpg/9c262394-9bb9-4334-90f8-51385f7d0c9b?t=1461929232259">
+                    <div class="about-text">
+                        <h1>FreeHealth</h1>
+                        <h5>Salud <span> y Bienestar digital</span></h5>
+                        <p>Freehealth es un pagina web especializadas para aquellos que tienen mucha dependencia hacia las redes sociales y su falta de control en estas. nos enfocamos en que el usuario pueda mantener la concentracion en sus quehaceres, responsabilidades, educacion y compromiso en su entorno y relaciones personales. Freehealth tambien esta enfocada en bienestar digital de nuestros usuarios y le damos los suficientes herramientas para que el usuario pueda mantener su enfoque en su vida personal y utilizar de mejorar manera las paginas web</p>
+                        <button type="button">Descubre mas</button>
+                    </div>
                 </div>
-              </header>
-              <div class=" calendar">
-                <ul class="weeks">
-                  <li>Dom</li>
-                  <li>Lun</li>
-                  <li>Mar</li>
-                  <li>Mie</li>
-                  <li>Jue</li>
-                  <li>Vie</li>
-                  <li>Sab</li>
-                </ul>
-                <ul class="days"></ul>
-              </div>
             </div>
-            <hr>
-            <h3>Lista de tareas</h3>
-            <hr>
-            <div class="agenda-container">
-              <h1>Agenda</h1>
-              <button id="open-modal">Añadir Tarea</button>
-              <div id="task-list">
-                  <h2>Tareas</h2>
-              </div>
-          </div>
-          <div id="task-modal" class="modal">
-              <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <form id="task-form">
-                      <input type="hidden" id="task-id">
-                      <label for="task-date">Fecha:</label>
-                      <input type="date" id="task-date" required>
-                      <br>
-                      <label for="task-time-start">Hora de Inicio:</label>
-                      <input type="time" id="task-time-start" required>
-                      <br>
-                      <label for="task-time-end">Hora de Fin:</label>
-                      <input type="time" id="task-time-end" required>
-                      <br>
-                      <label for="task-name">Tarea:</label>
-                      <input type="text" id="task-name" required>
-                      <br>
-                      <label for="task-priority">Prioridad:</label>
-                      <select id="task-priority" required>
-                          <option value="alta">Alta</option>
-                          <option value="media">Media</option>
-                          <option value="baja">Baja</option>
-                      </select>
-                      <br>
-                      <button type="submit" style="width: 355px;">Guardar Tarea</button>
-                  </form>
-              </div>
-          </div>      
+            <h3>Nuestros Servicios</h3>
+            <div class="services">
+                <div class="content">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-bar-chart"></i>
+                                <h4>Panel de Control</h4>
+                                <p>Utiliza nuestro panel de control para poder ver la cantidad de uso que le estas dando a tus dispositivos en las paginas web</p>
+                                <a href="index.html">Descubrelo</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-clock-o"></i>
+                                <h4>Limite de tiempo</h4>
+                                <p>Utiliza nuestro limite de tiempo para poder cargar la cantidad de tiempo que deseas ponerlo en cada pagina web y asi mantenerte vigente</p>
+                                <a href="time.html">Descubrelo</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="box">
+                                <i class="fa fa-calendar-check-o"></i>
+                                <h4>Agenda Digital</h4>
+                                <p>Utiliza nuestra agenda digital para poder añadir tus tareas importantes y mantenerte enfocado en lo que haces</p>
+                                <a href="agenda.html">Descubrelo</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <script src="javascript/script.js"></script>
+      </div>
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -160,6 +139,5 @@
       Menulist.forEach((item)=> 
       item.addEventListener('click',activeLink));
     </script>
-    <script src="assets/javascript/agenda.js"></script>
 </body>
 </html>

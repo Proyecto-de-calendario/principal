@@ -2,7 +2,7 @@ const connectDB  = require('../dataBase'); // Importa la función para conectar 
 
 async function obtenerUsuario(req, res) {
     try {
-        const id = req.params.id;
+        const id = +req.params.id;
 
         // 1. validacion de ID
         if (!id || isNaN(id)) {
@@ -57,8 +57,7 @@ async function crearUsuario(req, res) {
 
   async function eliminarUsuario(req, res) {
     try {
-      const iden = req.params.id;
-      const id = +iden;
+      const id = +req.params.id;
   
       if (!id || isNaN(id)) { 
         return res.status(400).json({ error: 'ID inválido.' });

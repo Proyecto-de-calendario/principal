@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font Link for Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/calenstyle.css" />
-    <link rel="stylesheet" href="assets/css/calendary.css">
-    <link rel="stylesheet" href="assets/css/task.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
+    <link rel="stylesheet" href="assets/css/perfil.css">
     <title>FreeHealth</title>
 </head>
 <body>
@@ -34,8 +31,8 @@
                 <div class="text">Limite de tiempo</div>
               </a>
             </li>
-            <li style="--bg:#45f11a;" class="active">
-              <a href="#">
+            <li style="--bg:#45f11a;">
+              <a href="agenda.html">
                 <div class="icon"><ion-icon name="calendar-outline"></ion-icon></div>
                 <div class="text">Agenda</div>
               </a>
@@ -43,13 +40,13 @@
             <li style="--bg:#18d4f5;">
               <a href="about.html">
                 <div class="icon"><ion-icon name="people-outline"></ion-icon></div>
-                <div class="text">Nosostros</div>
+                <div class="text">Nosotros</div>
               </a>
             </li>
           </div>
           <div class="bottom">
-            <li style="--bg:#333;">
-              <a href="perfil.html">
+            <li style="--bg:#fff;" class="active">
+              <a href="#">
                 <div class="icon">
                   <div class="imgBx">
                     <img src="imagenes/pexels-pixabay-415829.jpg">
@@ -70,72 +67,58 @@
       <div class="header">
         <div class="menuToggle"></div>
         <div class="nameSection">
-            <h1>Agenda</h1>
+            <h1>Mi perfil</h1>
         </div>
         <div class="mainConteiner">
-            <h3>Calendario</h3>
-            <hr>
-            <div class="wrapper">
-              <header>
-                <p class="current-date"></p>
-                <div class="icons">
-                  <span id="prev" class="material-symbols-rounded">chevron_left</span>
-                  <span id="next" class="material-symbols-rounded">chevron_right</span>
+            <div class="card">
+                <div class="ds-top"></div>
+                <div class="avatar-holder">
+                  <img src="imagenes/pexels-pixabay-415829.jpg">
                 </div>
-              </header>
-              <div class=" calendar">
-                <ul class="weeks">
-                  <li>Dom</li>
-                  <li>Lun</li>
-                  <li>Mar</li>
-                  <li>Mie</li>
-                  <li>Jue</li>
-                  <li>Vie</li>
-                  <li>Sab</li>
-                </ul>
-                <ul class="days"></ul>
+                <div class="name">
+                  <a href="#" target="_blank">Jane Clover</a>
+                </div>
+                <div class="button">
+                  <a href="login.html" class="btn" onmousedown="follow();">Cambiar de cuenta</a>
+                </div>
+                <div class="ds-info">
+                  <div class="ds pens">
+                    <h6 title="Number of pens created by the user">Notas<i class="fa fa-pencil-square-o"></i></h6>
+                    <p>2</p>
+                  </div>
+                  <div class="ds projects">
+                    <h6 title="Number of projects created by the user">Temporizador<i class="fa fa-hourglass-start"></i></h6>
+                    <p>3</p>
+                  </div>
+                  <div class="ds posts">
+                    <h6 title="Number of posts">Nivel<i class="fa fa-level-up"></i></h6>
+                    <p>10</p>
+                  </div>
+                </div>
+                <div class="ds-skill">
+                  <h6>Usos</h6>
+                  <div class="skill html">
+                    <h6><i class="fa fa-users"></i> Social </h6>
+                    <div class="bar bar-html">
+                      <p>95%</p>
+                    </div>
+                  </div>
+                  <div class="skill css">
+                    <h6><i class="fa fa-birthday-cake"></i> Entretenimiento </h6>
+                    <div class="bar bar-css">
+                      <p>90%</p>
+                    </div>
+                  </div>
+                  <div class="skill javascript">
+                    <h6><i class="fa fa-university"></i> Educacion </h6>
+                    <div class="bar bar-js">
+                      <p>75%</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <hr>
-            <h3>Lista de tareas</h3>
-            <hr>
-            <div class="agenda-container">
-              <h1>Agenda</h1>
-              <button id="open-modal">Añadir Tarea</button>
-              <div id="task-list">
-                  <h2>Tareas</h2>
-              </div>
-          </div>
-          <div id="task-modal" class="modal">
-              <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <form id="task-form">
-                      <input type="hidden" id="task-id">
-                      <label for="task-date">Fecha:</label>
-                      <input type="date" id="task-date" required>
-                      <br>
-                      <label for="task-time-start">Hora de Inicio:</label>
-                      <input type="time" id="task-time-start" required>
-                      <br>
-                      <label for="task-time-end">Hora de Fin:</label>
-                      <input type="time" id="task-time-end" required>
-                      <br>
-                      <label for="task-name">Tarea:</label>
-                      <input type="text" id="task-name" required>
-                      <br>
-                      <label for="task-priority">Prioridad:</label>
-                      <select id="task-priority" required>
-                          <option value="alta">Alta</option>
-                          <option value="media">Media</option>
-                          <option value="baja">Baja</option>
-                      </select>
-                      <br>
-                      <button type="submit" style="width: 355px;">Guardar Tarea</button>
-                  </form>
-              </div>
-          </div>      
         </div>
-        <script src="javascript/script.js"></script>
+      </div>
       <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -160,6 +143,6 @@
       Menulist.forEach((item)=> 
       item.addEventListener('click',activeLink));
     </script>
-    <script src="assets/javascript/agenda.js"></script>
+    <script src="assets/javascript/perfil.js"></script>
 </body>
 </html>

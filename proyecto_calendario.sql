@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-07-2024 a las 21:07:39
+-- Tiempo de generación: 27-07-2024 a las 00:28:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -42,12 +42,12 @@ CREATE TABLE `perfiles` (
 --
 
 CREATE TABLE `tareas` (
-  `idTarea` int(11) NOT NULL,
-  `idUsuario` int(5) NOT NULL,
+  `idTarea` int(10) NOT NULL,
+  `idUsuario` int(10) NOT NULL,
   `nombreTarea` varchar(20) NOT NULL,
-  `fechaInTarea` date NOT NULL,
-  `prioridadTarea` varchar(5) NOT NULL,
-  `fechaFinTarea` date NOT NULL
+  `prioridadTarea` int(1) NOT NULL,
+  `fechaTarea` varchar(10) NOT NULL,
+  `fechaFinTarea` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -57,10 +57,21 @@ CREATE TABLE `tareas` (
 --
 
 CREATE TABLE `usuarios` (
-  `idUsuario` int(20) NOT NULL,
+  `idUsuario` int(10) NOT NULL,
+  `nombre` varchar(20) NOT NULL,
   `email` varchar(30) NOT NULL,
   `contraseña` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `perfiles`
+--
+ALTER TABLE `perfiles`
+  ADD CONSTRAINT `perfiles_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `tareas` (`idUsuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

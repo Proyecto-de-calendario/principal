@@ -1,13 +1,13 @@
 
 let login = document.getElementsByClassName("login");
-document.getElementById('inscribirseButton').addEventListener('click', async () => {
+document.getElementById('redirectbuttom').addEventListener('click', async () => {
 
     const email = document.querySelector('input[name="email"]').value;
     const contrasenia = document.querySelector('input[name="pswd"]').value;
 
  // Envía los datos al servidor mediante fetch
- await fetch('/users', {
-    method: 'POST',
+ await fetch('localhost/:3000/users', {
+    method: 'GET',
     headers: {
         'Content-Type': 'application/json'
     },
@@ -28,7 +28,7 @@ document.getElementById('inscribirseButton').addEventListener('click', async () 
         localStorage.setItem('token', respuesta.token);
 
         // Redirigimos al usuario a la landingPage.
-        window.location.href = '/client/index.html'
+        window.location.href = 'Client/index.html'
     }
 
 })

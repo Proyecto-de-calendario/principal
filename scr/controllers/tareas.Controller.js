@@ -20,7 +20,6 @@ async function obtenerTareas(req, res) {
 
 async function crearTarea(req, res) {
   const id = +req.params.id;
-  
   const idTarea = Math.floor(Math.random() * Math.pow(10, 9));
   const fechaCreacion = new Date();
   const { tarea , fechaFin, prioridad } = req.body;
@@ -64,16 +63,15 @@ async function crearTarea(req, res) {
 
   async function borrarTarea(req, res) {
     try {
-      const idTarea = req.params.idTarea; 
+      const idTarea = +req.params.idTarea; 
       if (!idTarea || isNaN(idTarea)) {
         return res.status(400).json({ message: "Tarea ID inválido. Debe ser un número." }); 
       }
   
-      const id = +idTarea; 
       const connection = await connectDB(); 
   
       // DELETE
-      const [results] = await connection.query('DELETE FROM tareas WHERE idTarea = ?', [id]); 
+      const [results] = await connection.query('DELETE FROM tareas WHERE idTarea = ?', [idTarea]); 
       if (results.affectedRows === 0) {
         return res.status(404).json({ message: "Tarea no encontrada" }); // tarea no encontrada
       } 
