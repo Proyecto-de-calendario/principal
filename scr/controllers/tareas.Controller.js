@@ -3,7 +3,7 @@ const connectDB = require('../dataBase'); // Importa la función para conectar a
 async function obtenerTareas(req, res) {
   try { 
     const id = +req.params.id; // Verifcar que existe el id
-    if (!id || isNaN(usuario)) { 
+    if (!id || isNaN(id)) { 
       return res.status(400).json({ message: "Invalid user ID. Please provide a valid number." });
     }
 
@@ -49,10 +49,10 @@ async function crearTarea(req, res) {
 
     // 3. Insert
     const [result] = await connection.query(
-      'INSERT INTO tareas(idTarea, idUsuario, nombreTarea, prioridadTarea, fechaIngresoTarea, fechaFinTarea) VALUES(?, ?, ?, ?, ?, ?)',
+      'INSERT INTO tareas(idTarea, idUsuario, nombreTarea, prioridadTarea, fechaTarea, fechaFinTarea) VALUES(?, ?, ?, ?, ?, ?)',
       [idTarea, id, tarea, prioridad, fechaCreacion, fechaFin]
     );
-    res.json({ message: "Tarea creada", result });
+    res.json({ message: "Tarea creada", result,fechaCreacion });
     connection.end();
 
   } catch (error) {

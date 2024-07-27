@@ -28,7 +28,7 @@ async function obtenerUsuario(req, res) {
 }
 async function crearUsuario(req, res) {
     try {
-      const { email, contraseña } = req.body;
+      const { nombre,email, contrasenia } = req.body;
   
       // 1. validacion de email
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -36,7 +36,7 @@ async function crearUsuario(req, res) {
       }
   
       // 2. Contraseña
-      if (!contraseña || contraseña.length < 8) {
+      if (!contrasenia || contrasenia.length < 8) {
         return res.status(400).json({ error: 'Contraseña debe ser al menos 8 caracteres.' });
       }
   
@@ -44,7 +44,7 @@ async function crearUsuario(req, res) {
       const id = Math.floor(Math.random() * Math.pow(10, 9)); 
   
       // 3. Insert Query
-      const [result] = await connection.query('INSERT INTO usuarios (idUsuario, email, contraseña) VALUES (?, ?, ?)', [id, email, contraseña]); 
+      const [result] = await connection.query('INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)', [id, nombre, email, contrasenia]); 
   
       res.json({ message: "Usuario creado", result });
       connection.end(); // cerrar conexion
