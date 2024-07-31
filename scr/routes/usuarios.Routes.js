@@ -4,7 +4,8 @@ const usersController = require('../controllers/usuarios.Controller'); // Import
 
 // Rutas
 router.get('/:id', usersController.obtenerUsuario);
-router.post('/', usersController.crearUsuario);
+router.post('/reg', usersController.crearUsuario);
 router.delete('/:id', usersController.eliminarUsuario);
+router.post('/login', usersController.verificarUsuario);
 
 module.exports = router;

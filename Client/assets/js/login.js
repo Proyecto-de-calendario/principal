@@ -1,34 +1,26 @@
+// Login Function
+async function handleLogin() {
+  const email = document.querySelector('input[name="email"]').value;
+  const contrasenia = document.querySelector('input[name="pswd"]').value;
 
-let login = document.getElementsByClassName("login");
-document.getElementById('redirectbuttom').addEventListener('click', async () => {
-
-    const email = document.querySelector('input[name="email"]').value;
-    const contrasenia = document.querySelector('input[name="pswd"]').value;
-
- // Envía los datos al servidor mediante fetch
- await fetch('localhost/:3000/users', {
-    method: 'GET',
+  const response = await fetch('http://localhost:3000/users/login', {
+    method: 'POST',
     headers: {
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ email, contrasenia })
+  });
+  if (!response.ok) {
+    alert(await response.text());
+  } else {
+    const data = await response.json();
+    alert(data.msg);
+    window.location.href = 'index.html';
+  }
+}
+
+// Event Listener for Login Button
+document.getElementById('login_button').addEventListener('click', async (e) => {
+  e.preventDefault();
+  handleLogin(); 
 });
-    // Convertimos en json la respuesta.
-    const respuesta = await peticion.json();
-
-    // En caso de que falle la peticion, mostrar el mensaje de error.
-    if(!peticion.ok){
-        alert(respuesta.msg)
-    } else {
-
-        // Caso contrario mostrar el mensaje.
-        alert(respuesta.msg)
-
-        // Seteamos el token en el localStorage.
-        localStorage.setItem('token', respuesta.token);
-
-        // Redirigimos al usuario a la landingPage.
-        window.location.href = 'Client/index.html'
-    }
-
-})
