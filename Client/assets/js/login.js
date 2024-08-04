@@ -1,5 +1,10 @@
 // Login Function
 async function handleLogin() {
+  const token = localStorage.getItem('userToken');
+if (!token) {
+  } else {
+  localStorage.removeItem('userToken');
+}
   const email = document.querySelector('input[name="email"]').value;
   const contrasenia = document.querySelector('input[name="pswd"]').value;
 
@@ -15,7 +20,14 @@ async function handleLogin() {
   } else {
     const data = await response.json();
     alert(data.msg);
+
+    const token = data.token;
+localStorage.setItem('userToken', token);
+const id = response.idUsuario
+localStorage.setItem('idUser',id);
+
     window.location.href = 'index.html';
+
   }
 }
 

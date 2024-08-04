@@ -21,38 +21,40 @@ async function obtenerTareas(req, res) {
 async function crearTarea(req, res) {
   const id = +req.params.id;
   const idTarea = Math.floor(Math.random() * Math.pow(10, 9));
-  const fechaCreacion = new Date();
-  const { tarea , fechaFin, prioridad } = req.body;
+  const { tarea , horaInicio, horaFin, prioridad, dia } = req.body;
 
   try {
 
     // 1. Basicas
-    if (!tarea || !fechaFin || !prioridad) {
+    if (!tarea || !horaFin || !horaInicio || !prioridad || !dia) {
       return res.status(400).json({ message: "Faltan datos obligatorios." });
     } 
     if (typeof tarea !== 'string' || tarea.trim() === '') {
-      return res.status(400).json({ message: "Nombre de tarea inválido. Debe ser una cadena no vacía." });
+      return res.status(400).json({ message: "Nombre de tarea inválido" });
     }
-    if (typeof fechaFin !== 'string' || fechaFin.trim() === '') {
-      return res.status(400).json({ message: "Fecha de Fin inválida. Debe ser una cadena no vacía." }); 
+    if (typeof horaInicio !== 'string' || fechanicio.trim() === '') {
+      return res.status(400).json({ message: "hora de inicio inválida" });
+    }
+    if (typeof horaFin !== 'string' || fechaFin.trim() === '') {
+      return res.status(400).json({ message: "Fecha de Fin inválida" }); 
     }
     if (typeof prioridad !== 'number' || isNaN(prioridad)) {
-      return res.status(400).json({ message: "Prioridad inválida. Debe ser un número." }); 
+      return res.status(400).json({ message: "Prioridad inválida" }); 
     }
 
     // 2. Validacion Database
     const connection = await connectDB(); 
     const [existingTask] = await connection.query('SELECT * FROM tareas WHERE idTarea = ?', [idTarea]);
     if (existingTask.length > 0) {
-      return res.status(400).json({ message: "Ya existe una tarea con este ID" });
+      return res.status(400).json({ message: "Ya existe esta tarea" });
     }
 
     // 3. Insert
     const [result] = await connection.query(
-      'INSERT INTO tareas(idTarea, idUsuario, nombreTarea, prioridadTarea, fechaTarea, fechaFinTarea) VALUES(?, ?, ?, ?, ?, ?)',
-      [idTarea, id, tarea, prioridad, fechaCreacion, fechaFin]
+      'INSERT INTO tareas(idTarea, idUsuario, nombre, prioridad, horaInicio, horaFin, dia) VALUES(?, ?, ?, ?, ?, ?, ?)',
+      [idTarea, id, tarea, prioridad, horaInicio, horaFin, dia]
     );
-    res.json({ message: "Tarea creada", result,fechaCreacion });
+    res.json({ message: "Tarea creada", result });
     connection.end();
 
   } catch (error) {
@@ -65,7 +67,7 @@ async function crearTarea(req, res) {
     try {
       const idTarea = +req.params.idTarea; 
       if (!idTarea || isNaN(idTarea)) {
-        return res.status(400).json({ message: "Tarea ID inválido. Debe ser un número." }); 
+        return res.status(400).json({ message: "Tarea ID inválido" }); 
       }
   
       const connection = await connectDB(); 

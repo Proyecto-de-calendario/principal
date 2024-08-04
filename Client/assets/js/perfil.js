@@ -1,21 +1,27 @@
-const conectarBd = require("./backEnd/bd");
-
-const conexion = conectarBd()
-
-function actualizarPerfil() {
-  let formulario = document.getElementById("formulario");
-
-  formulario.addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      let nuevoNombre = document.getElementById("nombre").value;
-      let nuevoEmail = document.getElementById("email").value;
-      let nuevaEdad = document.getElementById("edad").value;
-
-      localStorage.setItem("nombre", nuevoNombre);
-      localStorage.setItem("email", nuevoEmail);
-      localStorage.setItem("edad", nuevaEdad);
-
-      console.log("¡Datos guardados!");
+const token = localStorage.getItem('userToken');
+const id = localStorage.getItem('idUser');
+async () => {
+try {
+  const response = await fetch(`http://localhost:3000/users/${id}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
   });
+
+  if (!response.ok) {
+    const error = new Error(`HTTP error! Status: ${response.status}`);
+    
+    throw error;
+  }
+
+  const data = await response.json();
+  const HTML =+ '<h3>'+ data.nombre +'</h3>';
+  document.getElementsByClassName("name").innerHTML = HTML;
+
+} catch (error) {
+  console.error('Error interno del servidor:', error);
+  
+  alert('se produjo un error al obtener su información. Por favor, inténtelo de nuevo más tarde.');
+}
 }
