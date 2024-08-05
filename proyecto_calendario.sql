@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-07-2024 a las 00:28:56
+-- Tiempo de generación: 06-08-2024 a las 00:03:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -28,12 +28,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `perfiles` (
-  `idPerfil` int(5) NOT NULL,
-  `idUsuario` int(30) NOT NULL,
-  `nombre` varchar(25) NOT NULL,
+  `idUsuario` int(10) NOT NULL,
+  `nombre` varchar(30) NOT NULL,
   `edad` int(2) NOT NULL,
-  `tutor` tinyint(1) NOT NULL
+  `tutor` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `perfiles`
+--
+
+INSERT INTO `perfiles` (`idUsuario`, `nombre`, `edad`, `tutor`) VALUES
+(734097501, 'Marco', 18, 0);
 
 -- --------------------------------------------------------
 
@@ -44,10 +50,11 @@ CREATE TABLE `perfiles` (
 CREATE TABLE `tareas` (
   `idTarea` int(10) NOT NULL,
   `idUsuario` int(10) NOT NULL,
-  `nombreTarea` varchar(20) NOT NULL,
-  `prioridadTarea` int(1) NOT NULL,
-  `fechaTarea` varchar(10) NOT NULL,
-  `fechaFinTarea` varchar(10) NOT NULL
+  `nombre` varchar(20) NOT NULL,
+  `prioridad` int(1) NOT NULL,
+  `horaInicio` varchar(20) NOT NULL,
+  `horaFin` varchar(20) NOT NULL,
+  `dia` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -60,18 +67,16 @@ CREATE TABLE `usuarios` (
   `idUsuario` int(10) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `email` varchar(30) NOT NULL,
-  `contraseña` varchar(30) NOT NULL
+  `contraseña` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Restricciones para tablas volcadas
+-- Volcado de datos para la tabla `usuarios`
 --
 
---
--- Filtros para la tabla `perfiles`
---
-ALTER TABLE `perfiles`
-  ADD CONSTRAINT `perfiles_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `tareas` (`idUsuario`);
+INSERT INTO `usuarios` (`idUsuario`, `nombre`, `email`, `contraseña`) VALUES
+(928902119, 'carlos', 'carlos@gmail.com', '$2b$10$HtN/KsVZz0buDiaNxbjo1O.V55p3NHZuaFxVYOZ3Q4pOdgIMQDNOC'),
+(734097501, 'marco', 'marco@gmail.com', '$2b$10$ZaJsba6lIJruFg1W6ySYjuRk49sQqkGdfhhHIhh8A5lRK/6gXmZS2');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
