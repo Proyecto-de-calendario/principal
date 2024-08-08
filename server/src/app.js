@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, '..', '..', 'client')));
 
 // Importar rutas de autenticación
 const authRoutes = require('./routes/authRoutes');
-console.log(authRoutes); // <-- Agregar esto para verificar qué se está importando
+console.log(authRoutes); 
 app.use('/auth', authRoutes);
 
 // Ruta para servir el archivo about.html por defecto
