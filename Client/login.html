@@ -1,85 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>FreeHealth</title>
-	<link rel="stylesheet" type="text/css" href="css/login.css">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <title>FreeHealth</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="main">  	
-		<input type="checkbox" id="chk" aria-hidden="true">
+    <div class="main">  	
+        <input type="checkbox" id="chk" aria-hidden="true">
 
-			<div class="signup">
-				<form id="signupForm">
-					<label for="chk" aria-hidden="true">
-                        <div class="icon" style="position: absolute; top:-35px;"><ion-icon name="heart-circle-outline"></ion-icon></div>
-                        <div class="text" style="font-family: 'Poppins', sans-serif;font-size: 1.2em;font-weight: 500;">FreeHealth</div>
-                    </label>
-					<input type="text" name="txt" placeholder="Nombre" required="">
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Contraseña">
-					<button type="submit">Inscribirse</button>
-				</form>
-			</div>
+        <div class="signup">
+            <form id="signupForm">
+                <label for="chk" aria-hidden="true">
+                    <div class="icon" style="position: absolute; top:-35px;"><ion-icon name="heart-circle-outline"></ion-icon></div>
+                    <div class="text" style="font-family: 'Poppins', sans-serif;font-size: 1.2em;font-weight: 500;">FreeHealth</div>
+                </label>
+                <input type="text" name="nombre" placeholder="User name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="contrasenia" placeholder="password" required>
+                <button type="submit">Inscribirse</button>
+            </form>
+        </div>
 
-			<div class="login">
-				<form id="loginForm">
-					<label for="chk" aria-hidden="true">Acceso</label>
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Contraseña" required="">
-					<button type="submit">Acceso</button>
-				</form>
-			</div>
-	</div>
+        <div class="login">
+            <form id="loginForm">
+                <label for="chk" aria-hidden="true">Acceso</label>
+                <input type="email" name="email" placeholder="email" required>
+                <input type="password" name="contrasenia" placeholder="password" required>
+                <button type="submit">Acceso</button>
+            </form>
+        </div>
+    </div>
     <script>
         document.getElementById('signupForm').addEventListener('submit', function(event){
             event.preventDefault();
-			const nombre = event.target.nombre.value;
-			const email = event.target.email.value;
-			const contrasenia = event.target.contrasenia.value;
+            const nombre = event.target.nombre.value;
+            const email = event.target.email.value;
+            const contrasenia = event.target.contrasenia.value;
 
-			fetch('http://localhost:3000/auth/register', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ nombre, email, contrasenia})
-			})
-			.then(respnse => {
-				if (response.ok) {
-					widow.location.href = 'about.html';
-				} else {
-					return response.json().then(data => { throw new Error(data.message); })
-				}
-			})
-			.catch(error => {
-				console.error('Error', error);
-			});
+            fetch('http://localhost:3000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre, email, contrasenia })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = 'about.html';
+                } else {
+                    return response.json().then(data => { throw new Error(data.message); })
+                }
+            })
+            .catch(error => {
+                console.error('Error', error);
+            });
         });
 
-		document.getElementById('LoginForm').addEventListener('submit', function(event) {
-			event.preventDefault();
-			const email = event.target.email.value;
-			const contrasenia = event.target.contrasenia.value;
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = event.target.email.value;
+            const contrasenia = event.target.contrasenia.value;
 
-			fetch('http://localhost:3000/auth/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email, contrasenia }),
-			})
-			.then(response => {
-				if (response.ok) {
-					widow.location.href = 'about.html';
-				} else {
-					return response.json().then(data => { throw new Error(data.message); })
-				}
-			})
-			.cath(error => {
-				console.error('Error', error);
-			});
-		});
+            fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, contrasenia }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = 'about.html';
+                } else {
+                    return response.json().then(data => { throw new Error(data.message); });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
