@@ -1,12 +1,12 @@
-const jwt = require('jsonwebtoken');
-const connectDB = require('../dataBase');
+import  verify  from 'jsonwebtoken';
+import { connectDB } from '../dataBase.js';
 
 const validarJWT = async (token) => {
 
     try {
         // Usamos el metodo verify para verificar el token.
         // El primer parametro es el token que recibimos por el header, y el segun el secret con el que firmamos el token.
-        const { id } = jwt.verify(token, 'mysecret');
+        const { id } = verify(token, 'mysecret');
 
         const connection = await connectDB();
 
@@ -29,4 +29,4 @@ const validarJWT = async (token) => {
 
 }
 
-module.exports = validarJWT;
+export {validarJWT};

@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const perfilesController = require('../controllers/perfilesController'); // Importa el controlador
+import { Router } from 'express';
+const perfilRouter = Router();
+import { obtenerPerfil, crearPerfil, eliminarPerfil } from '../controllers/perfilesController.js'; // Importa el controlador
 
-router.get('/:id', perfilesController.obtenerPerfil);
-router.post('/:id', perfilesController.crearPerfil);
-router.delete('/:id', perfilesController.eliminarPerfil);
+perfilRouter.get('/:id', obtenerPerfil);
+perfilRouter.post('/:id', crearPerfil);
+perfilRouter.delete('/:id', eliminarPerfil);
 
-module.exports = router;
+export {perfilRouter};

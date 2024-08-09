@@ -1,19 +1,19 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan')
+import express, { json } from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
 
 const app = express();
 
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(json());
 
 const PORT = process.env.PORT || 3000;
 
 // Modulo de rutas - Todos los endpoints estarían aquí
-const userRouter = require('./routes/usuarios.Routes');
-const taskRouter = require('./routes/tareas.Routes'); 
-const perfilRouter = require('./routes/perfiles.Routes');
+import {userRouter} from './routes/usuarios.Routes.js';
+import {taskRouter} from './routes/tareas.Routes.js'; 
+import {perfilRouter} from './routes/perfiles.Routes.js';
 
 app.use('/users', userRouter);
 app.use('/tasks', taskRouter);

@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const generarJWT = require('../helpers/generarJWT');
-const validarJWT = require('../helpers/validarJWT');
-const connectDB  = require('../dataBase'); // Importa la función para conectar a la base de datos
+import { hashSync, compareSync } from 'bcrypt';
+import {generarJWT} from '../helpers/generarJWT.js';
+import {validarJWT} from '../helpers/validarJWT.js';
+import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function obtenerUsuario(req, res) {
     try {
@@ -58,7 +58,7 @@ async function crearUsuario(req, res) {
     }
 
     const id = Math.floor(Math.random() * Math.pow(10, 9));
-    const hashContrasenia = bcrypt.hashSync(contrasenia, 10); 
+    const hashContrasenia = hashSync(contrasenia, 10); 
 
     const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
     await connection.query(sql, [id, nombre, email, hashContrasenia]);
@@ -126,7 +126,7 @@ async function crearUsuario(req, res) {
       }
   
       // Comparamos las contraseñas con el metodo compareSync que nos devolvera un true o false.
-      const validarContrasenia = bcrypt.compareSync(contrasenia, buscarUsuario[0].contraseña);
+      const validarContrasenia = compareSync(contrasenia, buscarUsuario[0].contraseña);
   
       // En caso de que no coincidan, retornamos un error sin dar información especifica de lo que fallo.
       if(!validarContrasenia){
@@ -150,7 +150,7 @@ async function crearUsuario(req, res) {
     }
   }
   
-  module.exports = {
+  export {
     obtenerUsuario,
     crearUsuario,
     eliminarUsuario,

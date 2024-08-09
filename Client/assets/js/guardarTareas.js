@@ -14,7 +14,7 @@ taskForm.addEventListener('submit', async (event) => {
 
   try {
     
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch('http://localhost:3000/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const connectDB = require('../dataBase'); // Importa la función para conectar a la base de datos
+import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function obtenerTareas(req, res) {
   try { 
@@ -85,7 +85,7 @@ async function crearTarea(req, res) {
       res.status(500).json({ message: "Error al borrar tarea" }); // error del servidor
     }
   }
-module.exports = {
+export {
   obtenerTareas,
   crearTarea,
   borrarTarea,

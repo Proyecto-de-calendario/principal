@@ -1,4 +1,4 @@
-const connectDB = require('../dataBase'); // Importa la función para conectar a la base de datos
+import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function obtenerPerfil(req, res) {
   try { 
@@ -92,7 +92,7 @@ async function crearPerfil(req, res) {
     }
   }
 
-  module.exports = {
+  export {
     obtenerPerfil,
     crearPerfil,
     eliminarPerfil
