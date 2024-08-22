@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-08-2024 a las 00:03:43
+-- Tiempo de generación: 22-08-2024 a las 20:53:28
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -52,8 +52,8 @@ CREATE TABLE `tareas` (
   `idUsuario` int(10) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `prioridad` int(1) NOT NULL,
-  `horaInicio` varchar(20) NOT NULL,
-  `horaFin` varchar(20) NOT NULL,
+  `fechaInicio` datetime NOT NULL,
+  `fechaFin` datetime NOT NULL,
   `dia` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
