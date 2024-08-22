@@ -149,10 +149,45 @@ async function crearUsuario(req, res) {
       res.status(500).json({ error: 'Error interno del servidor.' }); 
     }
   }
+
+  async function modificarUsuario() {
+    try {
+      const { nombre, email, contrasenia } = req.body;
+  
+      const connection = await connectDB();
+      // 3. Validar existencia de usuario
+      const [existeUsuario] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+      if (existeUsuario.length > 0) {
+        return res.status(400).json({ error: 'El correo electrónico ya está en uso.' });
+        
+      }
+  
+      // 4. Validacion de nombre
+      if (!nombre || nombre.length < 3) {
+        return res.status(400).json({ error: 'Nombre debe tener al menos 3 caracteres.' });
+      }
+  
+      const id = Math.floor(Math.random() * Math.pow(10, 9));
+      const hashContrasenia = hashSync(contrasenia, 10); 
+  
+      const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
+      await connection.query(sql, [id, nombre, email, hashContrasenia]);
+      
+      res.json({
+        msg: 'Registrado correctamente'
+      });
+      connection.end(); 
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+  } 
+  
   
   export {
     obtenerUsuario,
     crearUsuario,
     eliminarUsuario,
-    verificarUsuario
+    verificarUsuario,
+    modificarUsuario
   };
