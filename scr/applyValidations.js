@@ -1,5 +1,5 @@
-import { validationResult} from 'express-validator/check';
-export const validacionesDeTask = (req,res, next) => {
+import { validationResult} from 'express-validator';
+export const validacionesUsuario = (req,res, next) => {
     const errores = validationResult(req)
 
     if (!errores.isEmpty()) {

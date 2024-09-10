@@ -4,14 +4,9 @@ import {validarJWT} from '../helpers/validarJWT.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function obtenerUsuario(req, res) {
-    try {
+    
         const id = +req.params.id;
-
-        // 1. validacion de ID
-        if (!id || isNaN(id)) {
-            return res.status(400).json({ error: 'ID invalido' });
-        }
-
+    try {
         const connection = await connectDB(); 
 
         // 2. Query Database
@@ -31,26 +26,9 @@ async function obtenerUsuario(req, res) {
 
 }
 async function crearUsuario(req, res) {
-  try {
+  
     const { nombre, email, contrasenia } = req.body;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-
-    // 1. Validacion de email 
-    if (!email || !emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Correo electrónico inválido.' });
-    }
-    
-    // 2. Contraseña
-    if (!contrasenia || contrasenia.length < 8) {
-      return res.status(400).json({ error: 'Contraseña debe ser al menos 8 caracteres.' });
-    }
-    const connection = await connectDB();
-    // 3. Validar existencia de usuario
-    const [existeUsuario] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
-    if (existeUsuario.length > 0) {
-      return res.status(400).json({ error: 'El correo electrónico ya está en uso.' });
-      
-    }
+  try { 
 
     // 4. Validacion de nombre
     if (!nombre || nombre.length < 3) {
@@ -74,21 +52,11 @@ async function crearUsuario(req, res) {
 } 
 
   async function eliminarUsuario(req, res) {
-    try {
+    
       const id = +req.params.id;
-  
-      if (!id || isNaN(id)) { 
-        return res.status(400).json({ error: 'ID inválido.' });
-      }
+  try {
         // Tomamos el token desde los headers de la peticion de la siguiente manera:
     const token = req.headers.token;
-
-    // En caso de que no exista el token, retornamos un mensaje de error.
-    if(!token) {
-        return res.status(401).json({
-            msg: 'No estas autorizado para realizar esta acción'
-        });
-    } else {
 
         // Utilizamos el helper para validar el token.
         const usuario = await validarJWT(token);
@@ -102,16 +70,17 @@ async function crearUsuario(req, res) {
       }
       
       res.json({ message: "Usuario eliminado", results }); 
-    }
+    
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Error al borrar.' }); 
     }
   }
+
   async function verificarUsuario(req, res) {
+    const { email, contrasenia } = req.body;
+    
     try {
-      const { email, contrasenia } = req.body;
-  
       const connection = await connectDB(); 
   
       // 3. Insert Query
@@ -151,9 +120,9 @@ async function crearUsuario(req, res) {
   }
 
   async function modificarUsuario() {
-    try {
+    
       const { nombre, email, contrasenia } = req.body;
-  
+  try {
       const connection = await connectDB();
       // 3. Validar existencia de usuario
       const [existeUsuario] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
