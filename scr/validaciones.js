@@ -1,4 +1,4 @@
-import {body} from 'express-validator'
+import {param, body, header} from 'express-validator'
 
 export const validacionCrearUsuario = [
     body('email')
@@ -43,4 +43,31 @@ export const validacionModificarUsuario = [
     minSymbols:0,
 })
 .withMessage('la contraseña es muy debil como minimo debe tener 1 mayuscula, 1 número y un minimo de 8 caracteres')
+];
+
+export const validacionObtenerTareas = [
+param('id')
+    .isInt().withMessage('ID debe ser un número entero')
+    .notEmpty().withMessage('el ID no existe'),
+    header('token').notEmpty().withMessage('Token es requerido')
+];
+
+export const validarcrearTareas = [
+    param('id')
+    .isInt().withMessage('ID debe ser un número entero')
+    .notEmpty().withMessage('el ID no existe'),
+    header('token').notEmpty().withMessage('Token es requerido'),
+    body('tarea')
+    .notEmpty().withMessage('nombre de la tarea es obligatorio')
+    .isString().withMessage('tarea debe ser una cadena de caracteres'),
+    body('horaInicio')
+    .isString().withMessage('hora de inicio invalida')
+    .notEmpty().withMessage('la hora de inicio es obligatoria'),
+    body('horaFin')
+    .isString().withMessage('hora de fin invalida')
+    .notEmpty().withMessage('la hora de fin es obligatoria'),
+    body('prioridad')
+    .isEAN().withMessage('prioridad invalida'),
+body('dia')
+.notEmpty().withMessage('dia obligatorio')
 ];
