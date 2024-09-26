@@ -23,10 +23,10 @@ if (!token) {
 
     const token = data.token;
 localStorage.setItem('userToken', token);
-const id = response.idUsuario
+const id = data.idUsuario
 localStorage.setItem('idUser',id);
 
-    window.location.href = 'index.html';
+    window.location.href = 'landingPage.html';
 
   }
 }
