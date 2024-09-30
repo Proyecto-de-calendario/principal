@@ -1,5 +1,4 @@
 import "./style.css";
-
 import { router } from "./router";
 
 // ruta en la que se encuentra el usuario

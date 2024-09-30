@@ -3,54 +3,73 @@ import {generarJWT} from '../helpers/generarJWT.js';
 import {validarJWT} from '../helpers/validarJWT.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
-async function obtenerUsuario(req, res) {
-    
-        const id = +req.params.id;
-    try {
-        const connection = await connectDB(); 
-
-        // 2. Query Database
-        const [results] = await connection.query('SELECT * FROM usuarios WHERE idUsuario = ?', [id]);
-
-        // 3. resultado vacio
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'Usuario no encontrado.' });
-        }
-
-        // 4. resultado parcial
-        return res.json(results);
-    } catch (error) {
-        console.error(error); 
-        res.status(500).json({ error: 'Error interno del servidor.' });
+async function login(req, res) {
+  const { username, password } = req.body;
+  try {
+    const connection = await connect();
+    const sql = "SELECT * FROM users WHERE email = ?";
+    const [user] = await connection.query(sql, [username]);
+    const isPasswordValid = await bcrypt.compare([password], user.contraseña)
+    // Validación de usuario
+    if (!user[0].length === 0) {
+      return res.status(401).json({ message: "no existe el usuario" });
     }
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    } else {
 
-}
-async function crearUsuario(req, res) {
-  
-    const { nombre, email, contrasenia } = req.body;
-  try { 
-
-    // 4. Validacion de nombre
-    if (!nombre || nombre.length < 3) {
-      return res.status(400).json({ error: 'Nombre debe tener al menos 3 caracteres.' });
+      // Generar token JWT
+      const token = await generarJWT(user[0].id);
+      // Almacenar el token en la sesión del servidor
+      req.session.token = token;
+      // Almacenar el token en una cookie segura
+      res.cookie("authToken", token, {
+        httpOnly: true, // La cookie no es accesible desde JavaScript
+        secure: false, // Cambiar a true en producción con HTTPS
+        maxAge: 3600000, // Expiración en milisegundos (1 hora)
+      });
+      return res.json({ message: "Inicio de sesión exitoso" });
     }
-
-    const id = Math.floor(Math.random() * Math.pow(10, 9));
-    const hashContrasenia = hashSync(contrasenia, 10); 
-
-    const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
-    await connection.query(sql, [id, nombre, email, hashContrasenia]);
-    
-    res.json({
-      msg: 'Registrado correctamente'
-    });
-    connection.end(); 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error interno del servidor.' });
+    return res.status(500).json({ message: "Error Inesperado" });
   }
-} 
+}
 
+async function crearUsuario(req, res) {
+  const { nombre, email, password } = req.body;
+  const id = Math.floor(Math.random() * Math.pow(10, 9));
+  const hashContrasenia = hashSync(password, 10); 
+  try {
+    const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
+    [user] = await connection.query(sql, [id, nombre, email, hashContrasenia]);
+    
+    res.json({
+      msg: 'Registrado correctamente',
+    });
+    connection.end(); 
+    // Validación de usuario
+    if (!user[0].length === 0) {
+      return res.status(401).json({ message: "no existe el usuario" });
+    }
+    if (user[0].contraseña === hashContrasenia) {
+      // Generar token JWT
+      const token = await generarJWT(user[0].id);
+      // Almacenar el token en la sesión del servidor
+      req.session.token = token;
+      // Almacenar el token en una cookie segura
+      res.cookie("authToken", token, {
+        httpOnly: true, // La cookie no es accesible desde JavaScript
+        secure: false, // Cambiar a true en producción con HTTPS
+        maxAge: 3600000, // Expiración en milisegundos (1 hora)
+      });
+      return res.json({ message: "Inicio de sesión exitoso" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error Inesperado" });
+  }
+}
   async function eliminarUsuario(req, res) {
     
       const id = +req.params.id;
@@ -154,7 +173,7 @@ async function crearUsuario(req, res) {
   
   
   export {
-    obtenerUsuario,
+    login,
     crearUsuario,
     eliminarUsuario,
     verificarUsuario,

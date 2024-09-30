@@ -1,10 +1,11 @@
 import { Router } from 'express';
 const userRouter = Router();
-import { obtenerUsuario, crearUsuario, eliminarUsuario, verificarUsuario, modificarUsuario } from '../controllers/usuarios.Controller.js'; // Importa el controlador
+import { login, crearUsuario, eliminarUsuario, verificarUsuario, modificarUsuario } from '../controllers/usuarios.Controller.js'; // Importa el controlador
 import { validarUsuario,validacionCrearUsuario,validacionModificarUsuario } from '../validaciones.js';
 import { validacionesUsuario } from '../applyValidations.js';
+import { validarJWT } from '../helpers/validarJWT.js';
 // Rutas
-userRouter.get('/:id',validarUsuario,validacionesUsuario, obtenerUsuario);
+userRouter.get('/',validarUsuario,validacionesUsuario,validarJWT, login);
 userRouter.post('/reg',validacionCrearUsuario,validacionesUsuario, crearUsuario);
 userRouter.patch('/id',validacionModificarUsuario,modificarUsuario);
 userRouter.delete('/:id',validarUsuario,validacionesUsuario, eliminarUsuario);

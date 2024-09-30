@@ -6,7 +6,11 @@ export const loginPage = () => {
       "items-center",
       "justify-center",
       "h-screen",
-      "bg-gray-200"
+      "bg-gradient-to-br",
+      "from-indigo-600",
+      "via-purple-500",
+      "to-pink-500",
+      "bg-opacity-75"
     );
   
     const form = document.createElement("form");
@@ -14,10 +18,10 @@ export const loginPage = () => {
     form.classList.add(
       "flex",
       "flex-col",
-      "w-1/6",
+      "w-1/3",
       "gap-4",
       "bg-white",
-      "p-8",
+      "p-6",
       "rounded",
       "shadow-md"
     );
@@ -25,7 +29,7 @@ export const loginPage = () => {
     const title = document.createElement("h2");
   
     title.classList.add("text-2xl", "font-bold", "mb-4");
-    title.textContent = "Login form";
+    title.textContent = "FreeHealth";
   
     const usernameInput = document.createElement("input");
   
@@ -80,24 +84,24 @@ export const loginPage = () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
   
-      const username = usernameInput.value;
+      const email = usernameInput.value;
       const password = passwordInput.value;
   
       // Validación básica
-      if (!username || !password) {
+      if (!email || !password) {
         document.getElementById("message").innerText =
           "Por favor, completa todos los campos.";
         return;
       }
   
       try {
-        const response = await fetch("http://localhost:4000/auth/sign-in", {
+        const response = await fetch("http://localhost:3000/users", {
           method: "POST",
           credentials: "include", // Importante para enviar las cookies de sesión
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ email, password }),
         });
   
         if (!response.ok) {
@@ -120,7 +124,7 @@ export const loginPage = () => {
   
         const data = await response.json();
         console.log(data);
-        window.location.pathname = "/landingPage";
+        window.location.pathname = "/home";
       } catch (error) {
         console.log('error')
       }
