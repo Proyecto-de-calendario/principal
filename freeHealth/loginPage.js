@@ -7,6 +7,7 @@ export const loginPage = () => {
       "justify-center",
       "h-screen",
       "bg-gray-200"
+      
     );
   
     const form = document.createElement("form");

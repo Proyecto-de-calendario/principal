@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeHealth - Gráficos Estadísticos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
+  <div class="container mx-auto">
+    <header class="bg-white shadow-md">
+      <div class="flex justify-between items-center py-4">
+        <h1 class="text-2xl font-bold">FreeHealth</h1>
+        <nav class="space-x-4">
+          <a href="#funciones" class="text-gray-500 hover:text-indigo-500">Funciones</a>
+          <a href="#estadisticas" class="text-gray-500 hover:text-indigo-500">Estadísticas</a>
+          <a href="#contacto" class="text-gray-500 hover:text-indigo-500">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+
+    <section id="estadisticas" class="py-20 bg-white">
+      <h2 class="text-4xl font-bold text-indigo-600 mb-10">Estadísticas de Uso de Redes Sociales</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Distribución del Tiempo en Redes Sociales</h3>
+          <canvas id="tiempoRedesChart" width="400" height="400"></canvas>
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Promedio Semanal de Uso</h3>
+          <canvas id="promedioSemanalChart" width="400" height="400"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center py-4 text-gray-500">
+      <p>&copy; 2024 FreeHealth. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+
+  <script src="chart.js"></script>
+</body>
+</html>
+
+
