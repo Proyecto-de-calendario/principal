@@ -1,3 +1,5 @@
+import "./style.css";
+
 export const loginPage = () => {
     const container = document.createElement("div");
   

@@ -1,13 +1,19 @@
 import express, { json } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import  cookieParser  from 'cookie-parser';
 
 const app = express();
 
-app.use(cors());
+app.use(cors(
+    {
+    origin: "http://localhost:5173",
+    credentials: true,
+    }
+));
 app.use(morgan('dev'));
 app.use(json());
-
+app.use(cookieParser());
 const PORT = process.env.PORT || 3000;
 
 // Modulo de rutas - Todos los endpoints estarían aquí
