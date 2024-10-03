@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeHealth</title>
+
+  <!-- Iconos Google y FontAwesome -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75"></body>
+  <div class="container mx-auto">
+    <header class="bg-white shadow-md">
+      <div class="flex justify-between items-center py-4">
+        <h1 class="text-2xl font-bold">FreeHealth</h1>
+        <nav class="space-x-4">
+          <a href="#funciones" class="text-gray-500 hover:text-indigo-500">Funciones</a>
+          <a href="#estadisticas" class="text-gray-500 hover:text-indigo-500">Estadísticas</a>
+        
+          <a href="#logout" class="text-red-500 hover:text-red-700">Logout</a>
+        </nav>
+      </div>
+    </header>
+
+  <!-- Sidebar -->
+  
+
+  <!-- Main Content -->
+  <div class="flex-1 p-6 bg-gray-100">
+    <header class="mb-6">
+      <h1 class="text-3xl font-bold">Agenda</h1>
+    </header>
+
+    <section>
+      <h3 class="text-xl font-semibold">Calendario</h3>
+      <hr class="my-2">
+      <div class="wrapper bg-white p-4 rounded-lg shadow">
+        <header class="flex justify-between items-center mb-4">
+          <p class="current-date text-lg"></p>
+          <div class="icons flex space-x-2">
+            <span id="prev" class="material-symbols-rounded cursor-pointer">chevron_left</span>
+            <span id="next" class="material-symbols-rounded cursor-pointer">chevron_right</span>
+          </div>
+        </header>
+        <div class="calendar grid grid-cols-7 gap-2 text-center">
+          <!-- Cabeceras de la semana -->
+          <div class="weeks font-bold">Dom</div>
+          <div class="weeks font-bold">Lun</div>
+          <div class="weeks font-bold">Mar</div>
+          <div class="weeks font-bold">Mie</div>
+          <div class="weeks font-bold">Jue</div>
+          <div class="weeks font-bold">Vie</div>
+          <div class="weeks font-bold">Sab</div>
+          
+          <!-- Días del mes -->
+          <!-- Ejemplo de 30 días -->
+          <div class="day">1</div>
+          <div class="day">2</div>
+          <div class="day">3</div>
+          <div class="day">4</div>
+          <div class="day">5</div>
+          <div class="day">6</div>
+          <div class="day">7</div>
+          <div class="day">8</div>
+          <div class="day">9</div>
+          <div class="day">10</div>
+          <div class="day">11</div>
+          <div class="day">12</div>
+          <div class="day">13</div>
+          <div class="day">14</div>
+          <div class="day">15</div>
+          <div class="day">16</div>
+          <div class="day">17</div>
+          <div class="day">18</div>
+          <div class="day">19</div>
+          <div class="day">20</div>
+          <div class="day">21</div>
+          <div class="day">22</div>
+          <div class="day">23</div>
+          <div class="day">24</div>
+          <div class="day">25</div>
+          <div class="day">26</div>
+          <div class="day">27</div>
+          <div class="day">28</div>
+          <div class="day">29</div>
+          <div class="day">30</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6">
+      <h3 class="text-xl font-semibold">Lista de tareas</h3>
+      <hr class="my-2">
+      <div class="agenda-container bg-white p-4 rounded-lg shadow">
+        <h1 class="text-2xl">Agenda</h1>
+        <button id="open-modal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Añadir Tarea</button>
+        <div id="task-list" class="mt-6">
+          <h2 class="text-lg font-semibold">Tareas</h2>
+        </div>
+      </div>
+
+      <!-- Modal para agregar tareas -->
+      <div id="task-modal" class="modal hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="modal-content bg-white p-6 rounded-lg shadow">
+          <span class="close cursor-pointer">&times;</span>
+          <form id="task-form" class="space-y-4">
+            <input type="hidden" id="task-id">
+            <label for="task-date" class="block">Fecha:</label>
+            <input type="date" id="task-date" class="border w-full p-2 rounded" required>
+            <label for="task-time-start" class="block">Hora de Inicio:</label>
+            <input type="time" id="task-time-start" class="border w-full p-2 rounded" required>
+            <label for="task-time-end" class="block">Hora de Fin:</label>
+            <input type="time" id="task-time-end" class="border w-full p-2 rounded" required>
+            <label for="task-name" class="block">Tarea:</label>
+            <input type="text" id="task-name" class="border w-full p-2 rounded" required>
+            <label for="task-priority" class="block">Prioridad:</label>
+            <select id="task-priority" class="border w-full p-2 rounded" required>
+              <option value="alta">Alta</option>
+              <option value="media">Media</option>
+              <option value="baja">Baja</option>
+            </select>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Guardar Tarea</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="module" src="agenda.js"></script>
+
+  <script type="module" src="assets/guardarTareas.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  
+</body>
+
+</html>
