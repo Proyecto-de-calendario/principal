@@ -17,11 +17,10 @@ export const validacionCrearUsuario = [
 })
 .withMessage('la contraseña es muy debil como minimo debe tener 1 mayuscula, 1 número y un minimo de 8 caracteres')
 ];
-export const validarUsuario = [
+export const userValidations = [
     param('id')
     .isInt().withMessage('ID debe ser un número entero')
-    .notEmpty().withMessage('el ID no existe'),
-    header('token').notEmpty().withMessage('Token es requerido')
+    .notEmpty().withMessage('el ID no existe')
 ];
 
 export const validacionModificarUsuario = [

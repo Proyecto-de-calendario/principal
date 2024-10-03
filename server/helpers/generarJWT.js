@@ -1,17 +1,23 @@
-import  sign  from 'jsonwebtoken';
+import  jwt  from 'jsonwebtoken';
+import { SECRET_KEY } from "../config/config.js";
 
-const generarJWT = (idUser)=>{
+export function generarJWT (userId) {
     return new Promise((resolve, reject) => {
-
-        // Para generar un token se utiliza el metodo sign que significa firmar.
-        // Recibe como primer parametro la informacion y como segundo el 'secret' que seria la firma del token.
-        sign(idUser, 'mysecret',{
-            // Se establece un tiempo de duración del token.
-            expiresIn: 60*60
-        }, (err, token)=>{
-            (err)?reject(err):resolve(token);
-        })
-    }) 
-}
-
-export {generarJWT};
+      const payload = { userId };
+      jwt.sign(
+        payload,
+        SECRET_KEY,
+        {
+          expiresIn: "4h",
+        },
+        (error, token) => {
+          if (error) {
+            console.log(error);
+            reject("No se pudo generar el token");
+          } else {
+            resolve(token);
+          }
+        }
+      );
+    });
+  };
