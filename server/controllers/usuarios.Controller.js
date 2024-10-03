@@ -1,17 +1,18 @@
-import { hashSync, compareSync } from 'bcrypt';
+import  bcrypt, { hash }  from 'bcrypt';
 import {generarJWT} from '../helpers/generarJWT.js';
 import {validarJWT} from '../helpers/validarJWT.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
-async function login(req, res) {
+async function login (req, res) {
   const { username, password } = req.body;
   try {
-    const connection = await connect();
-    const sql = "SELECT * FROM users WHERE email = ?";
+    const connection = await connectDB();
+    const sql = "SELECT * FROM usuarios WHERE email = ?";
     const [user] = await connection.query(sql, [username]);
-    const isPasswordValid = await bcrypt.compare([password], user.contraseña)
+    res.json({user});
+    const isPasswordValid = await bcrypt.compare (password,user.contraseña ) 
     // Validación de usuario
-    if (!user[0].length === 0) {
+    if (user.length === 0) {
       return res.status(401).json({ message: "no existe el usuario" });
     }
     if (!isPasswordValid) {
@@ -36,7 +37,7 @@ async function login(req, res) {
   }
 }
 
-async function crearUsuario(req, res) {
+async function createUser (req, res) {
   const { nombre, email, password } = req.body;
   const id = Math.floor(Math.random() * Math.pow(10, 9));
   const hashContrasenia = hashSync(password, 10); 
@@ -70,7 +71,7 @@ async function crearUsuario(req, res) {
     return res.status(500).json({ message: "Error Inesperado" });
   }
 }
-  async function eliminarUsuario(req, res) {
+  async function removeUser (req, res) {
     
       const id = +req.params.id;
   try {
@@ -96,7 +97,7 @@ async function crearUsuario(req, res) {
     }
   }
 
-  async function verificarUsuario(req, res) {
+  async function verifyUser (req, res) {
     const { email, contrasenia } = req.body;
     
     try {
@@ -138,7 +139,7 @@ async function crearUsuario(req, res) {
     }
   }
 
-  async function modificarUsuario() {
+  async function modifyUser() {
     
       const { nombre, email, contrasenia } = req.body;
   try {
@@ -170,12 +171,19 @@ async function crearUsuario(req, res) {
       res.status(500).json({ error: 'Error interno del servidor.' });
     }
   } 
-  
+
+  export const validateSession = (req, res) => {
+    console.log(req.user);
+    return res.json({
+      message: "Acceso permitido a área protegida",
+      user: req.user,
+    });
+  };
   
   export {
     login,
-    crearUsuario,
-    eliminarUsuario,
-    verificarUsuario,
-    modificarUsuario
+    createUser,
+    removeUser,
+    verifyUser,
+    modifyUser
   };
