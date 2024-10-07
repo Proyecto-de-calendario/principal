@@ -1,32 +1,40 @@
-import  verify  from 'jsonwebtoken';
-import { connectDB } from '../dataBase.js';
+import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "../config/config.js";
+import { connectDB } from "../dataBase.js";
 
-const validarJWT = async (token) => {
+// Middleware para verificar el token JWT
+export const validateJWT = async (req, res, next) => {
+  console.log(req.session);
+  console.log("-----------");
+  console.log(req.cookies);
+  const token = req.cookies.authToken || req.session.token;
 
-    try {
-        // Usamos el metodo verify para verificar el token.
-        // El primer parametro es el token que recibimos por el header, y el segun el secret con el que firmamos el token.
-        const { id } = verify(token, 'mysecret');
+  if (!token) {
+    return res.status(403).json({ message: "Token no proporcionado" });
+  }
 
-        const connection = await connectDB();
+  try {
+    // Usamos el método verify para verificar el token.
+    // El primer parámetro es el token que recibimos por el header, y el segundo el secret con el que firmamos el token.
+    const decoded = jwt.verify(token, SECRET_KEY);
 
-        // Buscamos el usuario por id.
-        const [usuario] = await connection.query('SELECT * FROM USUARIOS WHERE idUsuario=? LIMIT 1',id);
+    const connection = await connectDB();
 
-        // En caso de que no exista retornamos false.
-        if(!usuario){
-            return false;
-        } else {
-            //Caso contrario retornamos el usuario.
-            return usuario[0];
-        }
-        
-    } catch (error) {
-        // Si ocurre un error lo mostramos por consola y retornamos false.
-        console.log(error);
-        return false;
+    // Buscamos el usuario por id.
+    const [user] = await connection.query(
+      "SELECT * FROM usuarios WHERE idUsuario=? LIMIT 1",
+      [decoded.id]
+    );
+
+    // En caso de que no exista retornamos un error.
+    if (!user) {
+      return res.status(401).json({ message: "Token inválido" });
+    } else {
+      // Caso contrario, agregamos la información del usuario decodificada al request.
+      req.user = user;
     }
-
-}
-
-export {validarJWT};
+  } catch (error) {
+    // Si ocurre un error retornamos un error.
+    return res.status(401).json({ message: "Token inválido" });
+  }
+};

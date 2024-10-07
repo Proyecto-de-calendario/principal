@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import  cookieParser  from 'cookie-parser';
+import session from'express-session';
 
 const app = express();
 
@@ -14,6 +15,12 @@ app.use(cors(
 app.use(morgan('dev'));
 app.use(json());
 app.use(cookieParser());
+app.use(session({
+    secret: 'session_secret_key', // Cambia esto por una clave secreta en producción
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Usar 'true' si usas HTTPS
+}));
 const PORT = process.env.PORT || 3000;
 
 // Modulo de rutas - Todos los endpoints estarían aquí

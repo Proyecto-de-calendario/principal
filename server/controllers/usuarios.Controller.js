@@ -1,16 +1,20 @@
-import  bcrypt, { hash }  from 'bcrypt';
-import {generarJWT} from '../helpers/generarJWT.js';
-import {validarJWT} from '../helpers/validarJWT.js';
+import   { hashSync,compareSync }  from 'bcrypt';
+import {generateJWT} from '../helpers/generarJWT.js';
+import {validateJWT} from '../helpers/validarJWT.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function login (req, res) {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
+const sql = "SELECT * FROM usuarios WHERE email = ?";
+
   try {
     const connection = await connectDB();
-    const sql = "SELECT * FROM usuarios WHERE email = ?";
-    const [user] = await connection.query(sql, [username]);
-    res.json({user});
-    const isPasswordValid = await bcrypt.compare (password,user.contraseña ) 
+    const row = await connection.query(sql, email);
+    const user = row[0][0];
+    if (!user) {
+      return res.status(401).json({ message: "no existe el usuario" });
+    }
+    const isPasswordValid = compareSync (password,user.contraseña ); 
     // Validación de usuario
     if (user.length === 0) {
       return res.status(401).json({ message: "no existe el usuario" });
@@ -20,7 +24,7 @@ async function login (req, res) {
     } else {
 
       // Generar token JWT
-      const token = await generarJWT(user[0].id);
+      const token = await generateJWT(user.idUsuario);
       // Almacenar el token en la sesión del servidor
       req.session.token = token;
       // Almacenar el token en una cookie segura
@@ -43,19 +47,19 @@ async function createUser (req, res) {
   const hashContrasenia = hashSync(password, 10); 
   try {
     const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
-    [user] = await connection.query(sql, [id, nombre, email, hashContrasenia]);
-    
+    const rows = await connection.query(sql, [id, nombre, email, hashContrasenia]);
+    const user = rows[0][0];
     res.json({
       msg: 'Registrado correctamente',
     });
     connection.end(); 
     // Validación de usuario
-    if (!user[0].length === 0) {
+    if (!user.length === 0) {
       return res.status(401).json({ message: "no existe el usuario" });
     }
     if (user[0].contraseña === hashContrasenia) {
       // Generar token JWT
-      const token = await generarJWT(user[0].id);
+      const token = await generateJWT(user.id);
       // Almacenar el token en la sesión del servidor
       req.session.token = token;
       // Almacenar el token en una cookie segura
@@ -79,7 +83,7 @@ async function createUser (req, res) {
     const token = req.headers.token;
 
         // Utilizamos el helper para validar el token.
-        const usuario = await validarJWT(token);
+        const usuario = await validateJWT(token);
         // delete query
       const connection = await connectDB();
       const [results] = await connection.query('DELETE FROM usuarios WHERE idUsuario = ?', [usuario.idUsuario]);
@@ -98,34 +102,34 @@ async function createUser (req, res) {
   }
 
   async function verifyUser (req, res) {
-    const { email, contrasenia } = req.body;
+    const { email, password } = req.body;
     
     try {
       const connection = await connectDB(); 
   
       // 3. Insert Query
       const sql ='SELECT * FROM usuarios WHERE email = ?'; 
-      const [buscarUsuario] = await connection.query(sql, email);
-    
+      const user = await connection.query(sql, email);
+    const validateUser = user[0][0];
       // En caso de que no se encuentre ningun usuario, retornamos un error.
-      if(!buscarUsuario[0]){
+      if(!validateUser){
           return res.status(400).json({
               msg: 'El usuario no existe'
           })
       }
   
       // Comparamos las contraseñas con el metodo compareSync que nos devolvera un true o false.
-      const validarContrasenia = compareSync(contrasenia, buscarUsuario[0].contraseña);
+      const validatePassword = compareSync(password, validateUser.contraseña);
   
       // En caso de que no coincidan, retornamos un error sin dar información especifica de lo que fallo.
-      if(!validarContrasenia){
+      if(!validatePassword){
           return res.status(401).json({
               msg: 'El usuario o contraseña no coiciden'
           })
       }
   
       // Hacemos uso del helper para generar el token y le pasamos el id.
-      const token = await generarJWT({id: buscarUsuario[0].idUsuario});
+      const token = await generateJWT({id: validateUser.idUsuario});
   
       //Retornamos el token con un mensaje al cliente.
       return res.json({
@@ -172,18 +176,37 @@ async function createUser (req, res) {
     }
   } 
 
-  export const validateSession = (req, res) => {
-    console.log(req.user);
-    return res.json({
-      message: "Acceso permitido a área protegida",
-      user: req.user,
-    });
-  };
+  export async function validateSession(req, res) {
+    const user = validateJWT();
+    if (user === !false) {
+      console.log(req.user);
+      return res.json({
+        message: "acceso permitido a área protegida",
+        user: req.user,
+      });
+    }
+  }
+
+      async function logout(req, res) {
+    try {
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ message: "Error al cerrar sesión" });
+        }
+        res.clearCookie("authToken");
+        return res.json({ message: "Cierre de sesión exitoso" });
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error Inesperado" });
+    }
+  }
   
   export {
     login,
     createUser,
     removeUser,
     verifyUser,
-    modifyUser
+    modifyUser,
+    logout
   };
