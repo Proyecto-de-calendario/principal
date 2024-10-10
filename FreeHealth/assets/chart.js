@@ -1,5 +1,6 @@
 // Importa los módulos de Chart.js
 import { Chart, registerables } from 'chart.js';
+
 export const charts = () => {
 // Registrar los componentes necesarios
 Chart.register(...registerables);
