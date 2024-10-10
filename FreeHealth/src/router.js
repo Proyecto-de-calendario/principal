@@ -26,14 +26,15 @@ export async function router(path, app) {
       break;
     case "/tiempo":
       window.location.pathname = '/pages/limitetiempo.html';
+      
       break;
     case "/agenda":
       window.location.pathname = '/pages/agenda.html';
-      agenda();
+      document.addEventListener("DOMContentLoaded", agenda);
       break;
     case "/estadisticas":
       window.location.pathname = '/pages/estadistica.html';
-      charts();
+      document.addEventListener("DOMContentLoaded", charts);
       break;
     default:
       window.location.pathname = '/pages/landingPage.html';

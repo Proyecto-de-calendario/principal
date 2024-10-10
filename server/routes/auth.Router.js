@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { login, createUser, modifyUser, removeUser, validateSession,logout } from '../controllers/usuarios.Controller.js'; // Importa el controlador
-import { userValidations,validacionCrearUsuario,validacionModificarUsuario } from '../validaciones.js';
+import { login, createUser, modifyUser, removeUser, validateSession,logout } from '../controllers/auth.Controller.js'; // Importa el controlador
+import { userValidations,validacionCrearUsuario,validacionModificarUsuario } from '../authValidations.js';
 import { validacionesUsuario } from '../applyValidations.js';
 import { validateJWT } from '../helpers/validarJWT.js';
 

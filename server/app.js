@@ -24,8 +24,8 @@ app.use(session({
 const PORT = process.env.PORT || 3000;
 
 // Modulo de rutas - Todos los endpoints estarían aquí
-import {userRouter} from './routes/usuarios.Routes.js';
-import {taskRouter} from './routes/tareas.Routes.js'; 
+import {userRouter} from './routes/auth.Router.js';
+import {taskRouter} from './routes/tasks.Router.js'; 
 import {perfilRouter} from './routes/perfiles.Routes.js';
 
 app.use('/users', userRouter);

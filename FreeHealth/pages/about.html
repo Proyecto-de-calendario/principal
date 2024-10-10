@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeHealth - Gráficos Estadísticos</title>
-  
-  <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
   <div class="container mx-auto">
@@ -15,8 +13,6 @@
         <nav class="space-x-4">
           <a href="landingPage.html" class="text-gray-500 hover:text-indigo-500">Funciones</a>
           <a href="estadistica.html" class="text-gray-500 hover:text-indigo-500">Estadísticas</a>
-          
-          <a id = "logoutButton" href="#logout" class="text-red-500 hover:text-red-700">Logout</a>
         </nav>
       </div>
     </header>
@@ -44,34 +40,6 @@
             </div>
         </div>
     </div>
-
-   
-<!-- Scripts -->
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-<script>
-  let menuToggle = document.querySelector('.menuToggle');
-  let sidebar = document.querySelector('.sidebar');
-  let main = document.querySelector('.mainConteiner');
-  let header = document.querySelector('.header');
-
-  menuToggle.onclick = function(){
-    menuToggle.classList.toggle('active');
-    sidebar.classList.toggle('active');
-    main.classList.toggle('active');
-    header.classList.toggle('active');
-  }
-
-  let Menulist = document.querySelectorAll('.Menulist li');
-  function activeLink(){
-    Menulist.forEach((item) => 
-    item.classList.remove('active')); 
-    this.classList.add('active');
-  }
-  Menulist.forEach((item)=> 
-  item.addEventListener('click',activeLink));
-</script>
-    
+    <script type="module" src="/main.js"></script>
 </body>
 </html>
