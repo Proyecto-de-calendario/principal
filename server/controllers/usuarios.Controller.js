@@ -41,25 +41,31 @@ const sql = "SELECT * FROM usuarios WHERE email = ?";
   }
 }
 
-async function createUser (req, res) {
+async function createUser(req, res) {
   const { nombre, email, password } = req.body;
   const id = Math.floor(Math.random() * Math.pow(10, 9));
-  const hashContrasenia = hashSync(password, 10); 
+  const hashContrasenia = hashSync(password, 10);
+
   try {
+    const connection = await connectDB(); // Asegúrate de conectar a la base de datos
     const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
-    const rows = await connection.query(sql, [id, nombre, email, hashContrasenia]);
-    const user = rows[0][0];
+    const [rows] = await connection.query(sql, [id, nombre, email, hashContrasenia]);
+    const user = rows;
+
     res.json({
       msg: 'Registrado correctamente',
     });
-    connection.end(); 
+
+    connection.end();
+
     // Validación de usuario
-    if (!user.length === 0) {
+    if (user.length === 0) {
       return res.status(401).json({ message: "no existe el usuario" });
     }
-    if (user[0].contraseña === hashContrasenia) {
+    
+    if (user.contraseña === hashContrasenia) {
       // Generar token JWT
-      const token = await generateJWT(user.id);
+      const token = await generateJWT(user.idUsuario);
       // Almacenar el token en la sesión del servidor
       req.session.token = token;
       // Almacenar el token en una cookie segura
@@ -75,6 +81,7 @@ async function createUser (req, res) {
     return res.status(500).json({ message: "Error Inesperado" });
   }
 }
+
   async function removeUser (req, res) {
     
       const id = +req.params.id;

@@ -5,7 +5,7 @@ export const validacionCrearUsuario = [
     .isString().withMessage('el email debe ser un string')
     .notEmpty().withMessage('el email es un campo obligatorio')
     .isEmail().withMessage('el Email debe ser valido'),
-    body('contrasenia')
+    body('password')
 .isString().withMessage('la contraseña debe ser un string')
 .notEmpty().withMessage('la contraseña no puede estar vacia')
 .isStrongPassword({

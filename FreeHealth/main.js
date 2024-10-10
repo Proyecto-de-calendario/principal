@@ -1,6 +1,5 @@
 import "./style.css";
 import { router } from "./src/router";
-
 // ruta en la que se encuentra el usuario
 const path = window.location.pathname;
 

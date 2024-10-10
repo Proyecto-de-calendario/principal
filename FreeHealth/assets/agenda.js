@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+export const agenda = () => {
+  document.addEventListener("DOMContentLoaded", function () {
     // Obtener referencias a elementos del DOM
     const currentDateElement = document.querySelector(".current-date");
     const daysContainer = document.querySelector(".days");
@@ -115,8 +116,4 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   });
-
-
-
-
-  
+}
