@@ -1,6 +1,6 @@
 import "./style.css";
 import { router } from "./src/router";
-import { logout } from "./src/logout.js";
+import { createLogoutButton } from "./src/logout.js";
 // ruta en la que se encuentra el usuario
 const path = window.location.pathname;
 
@@ -11,5 +11,5 @@ const app = document.getElementById("app");
 await router(path, app);
 
 document.addEventListener("DOMContentLoaded", () => {
-    logout();
+  createLogoutButton();
   });

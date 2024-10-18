@@ -28,7 +28,7 @@ import {userRouter} from './routes/auth.Router.js';
 import {taskRouter} from './routes/tasks.Router.js'; 
 import {perfilRouter} from './routes/perfiles.Routes.js';
 
-app.use('/users', userRouter);
+app.use('/auth', userRouter);
 app.use('/tasks', taskRouter);
 app.use('/perfiles', perfilRouter);
 

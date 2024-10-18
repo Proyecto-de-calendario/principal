@@ -115,7 +115,7 @@ export const loginPage = () => {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3000/users/login", {
+      const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         credentials: "include", // Importante para enviar las cookies de sesión
         headers: {

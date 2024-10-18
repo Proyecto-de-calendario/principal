@@ -127,7 +127,7 @@ export const logupPage = () => {
       }
       try {
       
-        const response = await fetch("http://localhost:3000/users/reg", {
+        const response = await fetch("http://localhost:3000/auth/reg", {
           method: "POST",
           credentials: "include", // Importante para enviar las cookies de sesión
           headers: {

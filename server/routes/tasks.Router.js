@@ -1,9 +1,10 @@
 import { Router } from 'express';
 const taskRouter = Router();
-import { obtenerTareas, crearTarea, borrarTarea } from '../controllers/tareas.Controller.js'; // Importa el controlador
+import { tasks, createTask,modifyTask, deleteTasks } from '../controllers/tasks.Controller.js'; // Importa el controlador
 
-taskRouter.get('/:id', obtenerTareas);
-taskRouter.post('/:id', crearTarea);
-taskRouter.delete('/:idTarea', borrarTarea);
+taskRouter.get('/:id', tasks);
+taskRouter.post('/', createTask);
+taskRouter.put('/:id',modifyTask);
+taskRouter.delete('/:idTarea', deleteTasks);
 
 export {taskRouter};

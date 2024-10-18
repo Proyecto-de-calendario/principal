@@ -1,8 +1,8 @@
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
-async function obtenerTareas(req, res) {
+async function tasks(req, res) {
   try { 
-    const id = +req.params.id; // Verifcar que existe el id
+    const id = +req.user.id; // Verifcar que existe el id
     if (!id || isNaN(id)) { 
       return res.status(400).json({ message: "Invalid user ID. Please provide a valid number." });
     }
@@ -18,8 +18,8 @@ async function obtenerTareas(req, res) {
   }
 } 
 
-async function crearTarea(req, res) {
-  const id = +req.params.id;
+async function createTask(req, res) {
+  const id = +req.user.id;
   const idTarea = Math.floor(Math.random() * Math.pow(10, 9));
   const { tarea , horaInicio, horaFin, prioridad, dia } = req.body;
 
@@ -63,7 +63,11 @@ async function crearTarea(req, res) {
   }
 }
 
-  async function borrarTarea(req, res) {
+async function modifyTask(req,res){
+
+}
+
+  async function deleteTasks(req, res) {
     try {
       const idTarea = +req.params.idTarea; 
       if (!idTarea || isNaN(idTarea)) {
@@ -86,7 +90,8 @@ async function crearTarea(req, res) {
     }
   }
 export {
-  obtenerTareas,
-  crearTarea,
-  borrarTarea,
+  tasks,
+  createTask,
+  modifyTask,
+  deleteTasks,
 };
