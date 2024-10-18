@@ -1,27 +1,125 @@
 export const agenda = () => {
-document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('task-modal');
-  const openModalBtn = document.getElementById('open-modal');
-  const closeModalBtn = modal.querySelector('.close');
+  document.addEventListener('DOMContentLoaded', () => {
+    const taskList = document.getElementById('task-list');
+    const taskForm = document.getElementById('task-form');
+    const taskModal = document.getElementById('task-modal');
+    const openModalBtn = document.getElementById('open-modal');
+    const closeModal = taskModal.querySelector('.close');
 
-  // Abrir el modal al hacer clic en el botón "Añadir Tarea"
-  openModalBtn.addEventListener('click', () => {
-    modal.classList.remove('hidden');
-  });
+    let tasks = [];
 
-  // Cerrar el modal al hacer clic en el botón de cerrar (X)
-  closeModalBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-  });
+    // Abrir el modal al hacer clic en el botón "Añadir Tarea"
+    openModalBtn.addEventListener('click', () => {
+      taskModal.classList.remove('hidden');
+    });
 
-  // Cerrar el modal cuando se hace clic fuera del contenido del modal
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.add('hidden');
+    // Cerrar el modal al hacer clic en el botón de cerrar (X)
+    closeModal.addEventListener('click', () => {
+      taskModal.classList.add('hidden');
+      clearForm();
+    });
+
+    // Cerrar el modal cuando se hace clic fuera del contenido del modal
+    window.addEventListener('click', (e) => {
+      if (e.target === taskModal) {
+        taskModal.classList.add('hidden');
+      }
+    });
+
+    // Agregar tarea
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const taskId = document.getElementById('task-id').value;
+      const newTask = {
+        id: taskId ? parseInt(taskId) : Date.now(),
+        date: document.getElementById('task-date').value,
+        startTime: document.getElementById('task-time-start').value,
+        endTime: document.getElementById('task-time-end').value,
+        name: document.getElementById('task-name').value,
+        priority: document.getElementById('task-priority').value,
+      };
+
+      if (taskId) {
+        const taskIndex = tasks.findIndex(task => task.id === parseInt(taskId));
+        tasks[taskIndex] = newTask; // Actualizar tarea existente
+      } else {
+        tasks.push(newTask); // Agregar nueva tarea
+      }
+
+      renderTasks();
+      taskModal.classList.add('hidden');
+      clearForm();
+    });
+
+    // Renderizar tareas en el DOM
+    function renderTasks() {
+      taskList.innerHTML = ''; // Limpiar la lista antes de renderizar
+
+      tasks.forEach(task => {
+        const taskItem = document.createElement('div');
+        taskItem.className = 'task-item border p-4 mb-2 rounded'; // Estilo para el item
+
+        taskItem.innerHTML = `
+          <h3 class="text-lg font-semibold">${task.name}</h3>
+          <p><strong>Fecha:</strong> ${task.date}</p>
+          <p><strong>Hora:</strong> ${task.startTime} - ${task.endTime}</p>
+          <p><strong>Prioridad:</strong> ${task.priority}</p>
+          <div class="flex space-x-4">
+            <button class="edit-task bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50 transition ease-in-out duration-300" data-id="${task.id}">
+              Editar
+            </button>
+            <button class="delete-task bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50 transition ease-in-out duration-300" data-id="${task.id}">
+              Eliminar
+            </button>
+            
+            </button>
+          </div>
+        `;
+
+        taskList.appendChild(taskItem);
+
+        // Agregar eventos para editar, eliminar y el nuevo botón
+        taskItem.querySelector('.edit-task').addEventListener('click', () => editTask(task.id));
+        taskItem.querySelector('.delete-task').addEventListener('click', () => deleteTask(task.id));
+        taskItem.querySelector('.extra-action').addEventListener('click', () => handleExtraAction(task.id));
+      });
+    }
+
+    // Editar tarea
+    function editTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        document.getElementById('task-date').value = task.date;
+        document.getElementById('task-time-start').value = task.startTime;
+        document.getElementById('task-time-end').value = task.endTime;
+        document.getElementById('task-name').value = task.name;
+        document.getElementById('task-priority').value = task.priority;
+        document.getElementById('task-id').value = task.id;
+
+        taskModal.classList.remove('hidden'); // Abrir el modal en modo de edición
+      }
+    }
+
+    // Eliminar tarea
+    function deleteTask(id) {
+      tasks = tasks.filter(task => task.id !== id);
+      renderTasks();
+    }
+
+    // Acción para el nuevo botón
+    function handleExtraAction(id) {
+      const task = tasks.find(t => t.id === id);
+      alert(`Acción extra para la tarea: ${task.name}`);
+    }
+
+    // Limpiar formulario después de agregar o editar una tarea
+    function clearForm() {
+      document.getElementById('task-id').value = '';
+      taskForm.reset();
     }
   });
-});
-
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   const currentDateElement = document.querySelector('.current-date');
@@ -111,4 +209,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // Renderizar el calendario inicial
   renderCalendar();
 });
-}
