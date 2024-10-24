@@ -209,3 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Renderizar el calendario inicial
   renderCalendar();
 });
+
+
+
