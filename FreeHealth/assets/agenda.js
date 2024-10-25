@@ -1,3 +1,5 @@
+import { saveTask } from "../src/guardarTarea"; // Importar correctamente saveTask si es necesario
+
 export const agenda = () => {
   document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
@@ -5,7 +7,6 @@ export const agenda = () => {
     const taskModal = document.getElementById('task-modal');
     const openModalBtn = document.getElementById('open-modal');
     const closeModal = taskModal.querySelector('.close');
-
     let tasks = [];
 
     // Abrir el modal al hacer clic en el botón "Añadir Tarea"
@@ -23,30 +24,50 @@ export const agenda = () => {
     window.addEventListener('click', (e) => {
       if (e.target === taskModal) {
         taskModal.classList.add('hidden');
+        clearForm();
       }
     });
 
-    // Agregar tarea
-    taskForm.addEventListener('submit', (e) => {
+    taskForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const taskId = document.getElementById('task-id').value;
-      const newTask = {
-        id: taskId ? parseInt(taskId) : Date.now(),
-        date: document.getElementById('task-date').value,
-        startTime: document.getElementById('task-time-start').value,
-        endTime: document.getElementById('task-time-end').value,
-        name: document.getElementById('task-name').value,
-        priority: document.getElementById('task-priority').value,
+      
+      const taskData = {
+        nombre: document.getElementById('task-name').value,
+        prioridad: document.getElementById('task-priority').value,
+        fechaInicio: document.getElementById('task-time-start').value,
+        fechaFin: document.getElementById('task-time-end').value,
+        dia: document.getElementById('task-date').value
       };
-
-      if (taskId) {
-        const taskIndex = tasks.findIndex(task => task.id === parseInt(taskId));
-        tasks[taskIndex] = newTask; // Actualizar tarea existente
-      } else {
-        tasks.push(newTask); // Agregar nueva tarea
+    
+      if (!taskData.nombre || !taskData.prioridad || !taskData.fechaInicio || !taskData.fechaFin || !taskData.dia) {
+        alert('Todos los campos son obligatorios');
+        return;
       }
-
+    
+      try {
+        const response = await fetch('http://localhost:3000/tasks', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Error al guardar la tarea');
+        }
+    
+        const savedTask = await response.json();
+        tasks.push(savedTask); // Agregar nueva tarea
+        renderTasks();
+        taskModal.classList.add('hidden');
+        clearForm();
+      } catch (error) {
+        console.error('Error al guardar la tarea:', error);
+        alert('Hubo un error al guardar la tarea. Intenta nuevamente.');
+      return;
+        }
       renderTasks();
       taskModal.classList.add('hidden');
       clearForm();
@@ -55,11 +76,9 @@ export const agenda = () => {
     // Renderizar tareas en el DOM
     function renderTasks() {
       taskList.innerHTML = ''; // Limpiar la lista antes de renderizar
-
       tasks.forEach(task => {
         const taskItem = document.createElement('div');
         taskItem.className = 'task-item border p-4 mb-2 rounded'; // Estilo para el item
-
         taskItem.innerHTML = `
           <h3 class="text-lg font-semibold">${task.name}</h3>
           <p><strong>Fecha:</strong> ${task.date}</p>
@@ -72,45 +91,71 @@ export const agenda = () => {
             <button class="delete-task bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50 transition ease-in-out duration-300" data-id="${task.id}">
               Eliminar
             </button>
-            
-            </button>
           </div>
         `;
-
         taskList.appendChild(taskItem);
-
-        // Agregar eventos para editar, eliminar y el nuevo botón
+        // Agregar eventos para editar y eliminar
         taskItem.querySelector('.edit-task').addEventListener('click', () => editTask(task.id));
         taskItem.querySelector('.delete-task').addEventListener('click', () => deleteTask(task.id));
-        taskItem.querySelector('.extra-action').addEventListener('click', () => handleExtraAction(task.id));
       });
     }
 
     // Editar tarea
-    function editTask(id) {
-      const task = tasks.find(t => t.id === id);
-      if (task) {
+    async function editTask(id) {
+      try {
+        // Obtener la tarea de la base de datos
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener la tarea');
+        }
+
+        const task = await response.json();
+
+        // Rellenar el formulario con los datos de la tarea
         document.getElementById('task-date').value = task.date;
         document.getElementById('task-time-start').value = task.startTime;
         document.getElementById('task-time-end').value = task.endTime;
         document.getElementById('task-name').value = task.name;
         document.getElementById('task-priority').value = task.priority;
         document.getElementById('task-id').value = task.id;
-
         taskModal.classList.remove('hidden'); // Abrir el modal en modo de edición
+      } catch (error) {
+        console.error('Error al obtener la tarea:', error);
+        alert('Hubo un error al obtener la tarea. Intenta nuevamente.');
       }
     }
 
     // Eliminar tarea
-    function deleteTask(id) {
-      tasks = tasks.filter(task => task.id !== id);
-      renderTasks();
-    }
+    async function deleteTask(id) {
+      try {
+        // Enviar solicitud de eliminación al servidor
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
 
-    // Acción para el nuevo botón
-    function handleExtraAction(id) {
-      const task = tasks.find(t => t.id === id);
-      alert(`Acción extra para la tarea: ${task.name}`);
+        if (!response.ok) {
+          throw new Error('Error al eliminar la tarea');
+        }
+
+        // Filtrar las tareas locales y renderizar nuevamente
+        tasks = tasks.filter(task => task.id !== id);
+        renderTasks();
+        alert('Tarea eliminada exitosamente');
+      } catch (error) {
+        console.error('Error al eliminar la tarea:', error);
+        alert('Hubo un error al eliminar la tarea. Intenta nuevamente.');
+      }
     }
 
     // Limpiar formulario después de agregar o editar una tarea
@@ -118,94 +163,26 @@ export const agenda = () => {
       document.getElementById('task-id').value = '';
       taskForm.reset();
     }
+
+    // Cargar tareas desde el servidor (si aplica)
+    async function loadTasks() {
+      try {
+        const response = await fetch('http://localhost:3000/tasks', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        const tasksData = await response.json();
+        tasks = tasksData; // Asigna las tareas recibidas a la variable tasks
+        renderTasks();
+      } catch (error) {
+        console.error('Error al cargar las tareas:', error);
+      }
+    }
+
+    // Cargar tareas al iniciar la página
+    loadTasks();
   });
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  const currentDateElement = document.querySelector('.current-date');
-  const calendarElement = document.querySelector('.calendar');
-  const prevBtn = document.getElementById('prev');
-  const nextBtn = document.getElementById('next');
-
-  let currentDate = new Date();
-  let currentYear = currentDate.getFullYear();
-  let currentMonth = currentDate.getMonth(); // Mes actual
-
-  const months = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-  ];
-
-  // Función para renderizar el calendario
-  function renderCalendar() {
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // Primer día del mes
-    const lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // Último día del mes
-    const lastDayOfLastMonth = new Date(currentYear, currentMonth, 0).getDate(); // Último día del mes anterior
-
-    // Actualizar encabezado con el mes y año
-    currentDateElement.textContent = `${months[currentMonth]} ${currentYear}`;
-
-    // Limpiar los días anteriores
-    calendarElement.innerHTML = `
-      <div class="weeks font-bold">Dom</div>
-      <div class="weeks font-bold">Lun</div>
-      <div class="weeks font-bold">Mar</div>
-      <div class="weeks font-bold">Mie</div>
-      <div class="weeks font-bold">Jue</div>
-      <div class="weeks font-bold">Vie</div>
-      <div class="weeks font-bold">Sab</div>
-    `;
-
-    // Días del mes anterior
-    for (let i = firstDayOfMonth; i > 0; i--) {
-      calendarElement.innerHTML += `<div class="day text-gray-400">${lastDayOfLastMonth - i + 1}</div>`;
-    }
-
-    // Días del mes actual
-    for (let i = 1; i <= lastDateOfMonth; i++) {
-      let dayClass = 'day';
-      
-      // Si es el día actual, agregar la clase de "resaltar"
-      if (
-        i === currentDate.getDate() &&
-        currentMonth === new Date().getMonth() &&
-        currentYear === new Date().getFullYear()
-      ) {
-        dayClass += ' bg-blue-500 text-white rounded-full';
-      }
-
-      calendarElement.innerHTML += `<div class="${dayClass}">${i}</div>`;
-    }
-
-    // Días del mes siguiente
-    const totalCells = firstDayOfMonth + lastDateOfMonth;
-    const nextDays = 7 - (totalCells % 7);
-
-    for (let i = 1; i <= nextDays && nextDays < 7; i++) {
-      calendarElement.innerHTML += `<div class="day text-gray-400">${i}</div>`;
-    }
-  }
-
-  // Cambiar al mes anterior
-  prevBtn.addEventListener('click', () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    renderCalendar();
-  });
-
-  // Cambiar al mes siguiente
-  nextBtn.addEventListener('click', () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderCalendar();
-  });
-
-  // Renderizar el calendario inicial
-  renderCalendar();
-});

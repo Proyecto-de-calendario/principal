@@ -183,16 +183,25 @@ async function createUser(req, res) {
     }
   } 
 
-  export async function validateSession(req, res) {
-    const user = validateJWT();
-    if (user === !false) {
-      console.log(req.user);
+export async function validateSession(req, res) {
+  try {
+    const user = validateJWT(req); // Asegúrate de pasar `req` a la función `validateJWT`
+    
+    if (user) {
+      req.user = user; // Asigna el usuario al objeto `req`
       return res.json({
-        message: "acceso permitido a área protegida",
+        message: "Acceso permitido a área protegida",
         user: req.user,
       });
+    } else {
+      return res.status(401).json({ message: "Acceso denegado" });
     }
+  } catch (error) {
+    console.error('Error validando la sesión:', error);
+    return res.status(500).json({ message: "Error interno del servidor" });
   }
+}
+
 
       async function logout(req, res) {
     try {

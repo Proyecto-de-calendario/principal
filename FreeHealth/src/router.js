@@ -2,7 +2,7 @@ import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
 import { agenda } from "../assets/agenda.js";
 import { charts } from "../assets/chart.js";
-import { saveTask } from "./guardarTarea.js";
+import { saveTask,tasks } from "./guardarTarea.js";
 
 export async function router(path, app) {
 //  if (path !== "/" || path !== "/home") {
@@ -31,7 +31,7 @@ export async function router(path, app) {
       break;
     case "/agenda":
       window.location.pathname = '/pages/agenda.html';
-      document.addEventListener("DOMContentLoaded", agenda,saveTask);
+      document.addEventListener("DOMContentLoaded", agenda);
       break;
     case "/estadisticas":
       window.location.pathname = '/pages/estadistica.html';

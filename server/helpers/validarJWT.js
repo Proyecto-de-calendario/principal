@@ -4,37 +4,27 @@ import { connectDB } from "../dataBase.js";
 
 // Middleware para verificar el token JWT
 export const validateJWT = async (req, res, next) => {
-  console.log(req.session);
-  console.log("-----------");
-  console.log(req.cookies);
   const token = req.cookies.authToken || req.session.token;
-
   if (!token) {
     return res.status(403).json({ message: "Token no proporcionado" });
   }
 
   try {
-    // Usamos el método verify para verificar el token.
-    // El primer parámetro es el token que recibimos por el header, y el segundo el secret con el que firmamos el token.
+    // Verificar el token
     const decoded = jwt.verify(token, SECRET_KEY);
-
     const connection = await connectDB();
 
-    // Buscamos el usuario por id.
-    const [user] = await connection.query(
-      "SELECT * FROM usuarios WHERE idUsuario=? LIMIT 1",
-      [decoded.id]
-    );
+    // Buscar el usuario por ID
+    const [users] = await connection.query("SELECT * FROM usuarios WHERE idUsuario=? LIMIT 1", [decoded.userId]);
 
-    // En caso de que no exista retornamos un error.
-    if (!user) {
+    // Verificar si el usuario existe
+    if (users.length === 0) {
       return res.status(401).json({ message: "Token inválido" });
     } else {
-      // Caso contrario, agregamos la información del usuario decodificada al request.
-      req.user = user;
+      req.user = { id: users[0].idUsuario }; // Asegúrate de asignar correctamente el ID del usuario
+      next(); // Continuar al siguiente middleware o ruta
     }
   } catch (error) {
-    // Si ocurre un error retornamos un error.
     return res.status(401).json({ message: "Token inválido" });
   }
 };
