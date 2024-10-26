@@ -2,19 +2,13 @@ import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
 import { agenda } from "../assets/agenda.js";
 import { charts } from "../assets/chart.js";
-import { saveTask,tasks } from "./guardarTarea.js";
+import { validateSession } from "../session.js";
 
 export async function router(path, app) {
-//  if (path !== "/" || path !== "/home") {
-//    const result = await validateSession();
-//    if (!result) {
-//      window.location.pathname = "/";
-//      return;
-//  }
-//}
-
+ 
+  
+  
   app.innerHTML = ''; // Limpiar contenido anterior
-
   switch (path) {
     case "/":
       app.appendChild(loginPage());
@@ -27,7 +21,6 @@ export async function router(path, app) {
       break;
     case "/tiempo":
       window.location.pathname = '/pages/limitetiempo.html';
-      
       break;
     case "/agenda":
       window.location.pathname = '/pages/agenda.html';
@@ -42,11 +35,3 @@ export async function router(path, app) {
       break;
   }
 }
-
-const validateSession = async () => {
-  const response = await fetch("http://localhost:3000/users/session", {
-    method: "GET",
-    credentials: "include",
-  });
-  return response.ok;
-};
