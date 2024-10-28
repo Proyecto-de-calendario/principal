@@ -1,6 +1,5 @@
 import { saveTask } from '../src/saveTasks.js';
 import { editTask } from '../src/editTasks.js';
-import { updateTask } from '../src/editTasks.js';
 import { deleteTask } from '../src/deleteTask.js';
 
 export function agenda() {
@@ -12,19 +11,16 @@ export function agenda() {
       console.error('Error al cargar las tareas:', error);
     }
 
-    // Abrir el modal al hacer clic en el botón "Añadir Tarea"
     document.getElementById('open-modal').addEventListener('click', () => {
       document.getElementById('task-modal').classList.remove('hidden');
-      saveTask();
+      saveTask(); // Llama a saveTask solo cuando necesites guardar una tarea nueva
     });
 
-    // Cerrar el modal al hacer clic en el botón de cerrar (X)
     document.querySelector('.close').addEventListener('click', () => {
       document.getElementById('task-modal').classList.add('hidden');
       clearForm();
     });
 
-    // Cerrar el modal cuando se hace clic fuera del contenido del modal
     window.addEventListener('click', (e) => {
       if (e.target === document.getElementById('task-modal')) {
         document.getElementById('task-modal').classList.add('hidden');
@@ -37,7 +33,7 @@ export function agenda() {
     document.getElementById('task-id').value = '';
     document.getElementById('task-form').reset();
   }
-  
+
   async function loadTasks() {
     try {
       const response = await fetch('http://localhost:3000/tasks', {
@@ -56,7 +52,7 @@ export function agenda() {
       throw error;
     }
   }
-  
+
   function renderTasks(tasks) {
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = ''; // Limpiar la lista antes de renderizar
@@ -87,7 +83,6 @@ export function agenda() {
           renderTasks(tasks);
           alert('Tarea eliminada exitosamente');
         } catch (error) {
-          console.error('Error al eliminar la tarea:', error);
           alert('Hubo un error al eliminar la tarea. Intenta nuevamente.');
         }
       });
