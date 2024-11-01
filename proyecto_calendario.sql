@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-10-2024 a las 21:30:36
+-- Tiempo de generación: 31-10-2024 a las 20:25:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -24,26 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `perfiles`
---
-
-CREATE TABLE `perfiles` (
-  `idUsuario` int(10) NOT NULL,
-  `nombre` varchar(30) NOT NULL,
-  `edad` int(2) NOT NULL,
-  `tutor` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `perfiles`
---
-
-INSERT INTO `perfiles` (`idUsuario`, `nombre`, `edad`, `tutor`) VALUES
-(734097501, 'Marco', 18, 0);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `tareas`
 --
 
@@ -51,11 +31,25 @@ CREATE TABLE `tareas` (
   `idTarea` int(10) NOT NULL,
   `idUsuario` int(10) NOT NULL,
   `nombre` varchar(20) NOT NULL,
-  `prioridad` varchar(9) NOT NULL,
-  `fechaInicio` datetime NOT NULL,
-  `fechaFin` datetime NOT NULL,
+  `prioridad` int(1) NOT NULL,
+  `horaInicio` varchar(20) NOT NULL,
+  `horaFin` varchar(20) NOT NULL,
   `dia` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tiempo_uso`
+--
+
+CREATE TABLE `tiempo_uso` (
+  `id_usuario` int(10) NOT NULL,
+  `id_sesion` int(11) NOT NULL,
+  `red_social` varchar(20) NOT NULL,
+  `tiempo_inicio` datetime NOT NULL,
+  `tiempo_final` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -76,27 +70,28 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `email`, `contraseña`) VALUES
 (928902119, 'carlos', 'carlos@gmail.com', '$2b$10$HtN/KsVZz0buDiaNxbjo1O.V55p3NHZuaFxVYOZ3Q4pOdgIMQDNOC'),
-(734097501, 'marco', 'marco@gmail.com', '$2b$10$ZaJsba6lIJruFg1W6ySYjuRk49sQqkGdfhhHIhh8A5lRK/6gXmZS2');
+(734097501, 'marco', 'marco@gmail.com', '$2b$10$ZaJsba6lIJruFg1W6ySYjuRk49sQqkGdfhhHIhh8A5lRK/6gXmZS2'),
+(932985488, 'mirna', 'mirnafranco58@gmail.com', '$2b$10$tdk0VHWLp7s5p8cicuAZaOcKT3o9CmQq36IEeSx/92Mlk17mgOC8a');
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `tareas`
+-- Indices de la tabla `tiempo_uso`
 --
-ALTER TABLE `tareas`
-  ADD PRIMARY KEY (`idTarea`);
+ALTER TABLE `tiempo_uso`
+  ADD PRIMARY KEY (`id_sesion`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT de la tabla `tareas`
+-- AUTO_INCREMENT de la tabla `tiempo_uso`
 --
-ALTER TABLE `tareas`
-  MODIFY `idTarea` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `tiempo_uso`
+  MODIFY `id_sesion` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
