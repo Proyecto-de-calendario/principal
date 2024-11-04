@@ -1,9 +1,9 @@
 import { Router } from 'express';
-const perfilRouter = Router();
-import { obtenerPerfil, crearPerfil, eliminarPerfil } from '../controllers/perfiles.Controller.js'; // Importa el controlador
+const dataRouter = Router();
+import { obtenerTiempo, tiempo, eliminar } from '../controllers/perfiles.Controller.js'; // Importa el controlador
 
-perfilRouter.get('/:id', obtenerPerfil);
-perfilRouter.post('/:id', crearPerfil);
-perfilRouter.delete('/:id', eliminarPerfil);
+dataRouter.get('/', obtenerTiempo);
+dataRouter.post('/', tiempo);
+dataRouter.delete('/:id', eliminar);
 
-export {perfilRouter};
+export {dataRouter};

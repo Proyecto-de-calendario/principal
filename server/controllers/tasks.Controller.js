@@ -2,6 +2,7 @@ import { connectDB } from '../dataBase.js'; // Importa la función para conectar
 
 async function tasks(req, res) {
   const id = +req.user.id;
+  
   try {
     const connection = await connectDB();
     const [results] = await connection.query('SELECT * FROM tareas WHERE idUsuario = ?', [id]);
@@ -12,13 +13,24 @@ async function tasks(req, res) {
   }
 }
 
-
+async function findTask(req, res) {
+  const id = +req.user.id;
+  const tarea = req.params.id;
+  
+  try {
+    const connection = await connectDB();
+    const [results] = await connection.query('SELECT * FROM tareas WHERE idUsuario = ? and idTarea = ?', [id,tarea]);
+    return res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" }); // error del servidor
+  }
+}
 
  async function createTask(req, res) {
-  console.log(req.body)
   const id = req.user.id;
   const { name, priority, startTime, endTime, date } = req.body;
-
+console.log(req.body)
   try {
     const connection = await connectDB();
 
@@ -37,19 +49,20 @@ async function tasks(req, res) {
 }
 
 async function modifyTask(req, res) {
-  const idTarea = +req.params.idTarea;
-  const { tarea, horaInicio, horaFin, prioridad, dia } = req.body;
+  const idUser = req.user.id;
+  
+  const { id, name, priority, startTime, endTime, date } = req.body;
   try {
     const connection = await connectDB();
     const [results] = await connection.query(
-      'UPDATE tareas SET nombre = ?, prioridad = ?, horaInicio = ?, horaFin = ?, dia = ? WHERE idTarea = ?',
-      [tarea, prioridad, horaInicio, horaFin, dia, idTarea]
+      'UPDATE tareas SET nombre = ?, prioridad = ?, fechaInicio = ?, fechaFin = ?, dia = ? WHERE idTarea = ? and  idUsuario = ?',
+      [ name, priority, startTime, endTime, date, id, idUser ]
     );
     if (results.affectedRows === 0) {
       return res.status(404).json({ message: "Tarea no encontrada" }); // tarea no encontrada
     }
     return res.json({ message: "Tarea actualizada exitosamente", results });
-    connection.end();
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al actualizar tarea" }); // error del servidor
@@ -57,11 +70,12 @@ async function modifyTask(req, res) {
 }
 
 async function deleteTasks(req, res) {
-  const idTarea = +req.params.idTarea;
+  const id = req.user.id
+  const idTarea = +req.params.id;
   try {
     const connection = await connectDB();
     // DELETE
-    const [results] = await connection.query('DELETE FROM tareas WHERE idTarea = ?', [idTarea]);
+    const [results] = await connection.query('DELETE FROM tareas WHERE idTarea = ? AND idUsuario = ?', [idTarea,id]);
     if (results.affectedRows === 0) {
       return res.status(404).json({ message: "Tarea no encontrada" }); // tarea no encontrada
     }
@@ -77,4 +91,5 @@ export {
   createTask,
   modifyTask,
   deleteTasks,
+  findTask
 };

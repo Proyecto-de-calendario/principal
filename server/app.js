@@ -26,10 +26,10 @@ const PORT = process.env.PORT || 3000;
 // Modulo de rutas - Todos los endpoints estarían aquí
 import {userRouter} from './routes/auth.Router.js';
 import {taskRouter} from './routes/tasks.Router.js'; 
-import {perfilRouter} from './routes/perfiles.Routes.js';
+import {dataRouter} from './routes/perfiles.Routes.js';
 
 app.use('/auth', userRouter);
 app.use('/tasks', taskRouter);
-app.use('/perfiles', perfilRouter);
+app.use('/perfiles', dataRouter);
 
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

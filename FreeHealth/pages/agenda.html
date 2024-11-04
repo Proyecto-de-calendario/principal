@@ -8,6 +8,7 @@
   <title>FreeHealth</title>
 
   
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded">
 </head>
 
 <body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75"></body>
@@ -88,7 +89,7 @@
       </div>
     </section>
 
-    <section class="mt-6">
+    <section id="tasks" class="mt-6">
       <h3 class="text-xl font-semibold">Lista de tareas</h3>
       <hr class="my-2">
       <div class="agenda-container bg-white p-4 rounded-lg shadow">
@@ -126,6 +127,10 @@
     </section>
   </div>
   <script type="module" src="/main.js"></script>
+<script type="module">
+    import { setupCalendar } from '../assets/calendar.js';
+    setupCalendar();
+  </script>
   <script type="module">
     import { agenda } from '../assets/agenda.js';
     agenda();
