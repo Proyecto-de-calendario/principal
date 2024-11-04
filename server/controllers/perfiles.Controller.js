@@ -1,14 +1,14 @@
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
-async function obtenerPerfil(req, res) {
+async function obtenerTiempo(req, res) {
   try { 
-    const id = +req.params.id;  // Verifcar que existe el id
+    const id = +req.user.id;  // Verifcar que existe el id
     if (!id || isNaN(id)) { 
       return res.status(400).json({ message: "ID no valido" });
     }
 
     const connection = await connectDB(); 
-    const [results] = await connection.query('SELECT * FROM perfiles WHERE idUsuario = ?', [id]);
+    const [results] = await connection.query('SELECT * FROM tiempo_uso WHERE idUsuario = ?', [id]);
 
     return res.json(results);
   } catch (error) {
@@ -17,34 +17,28 @@ async function obtenerPerfil(req, res) {
     res.status(500).json({ message: "error del servidor" }); //  error del servidor
   }
 } 
-async function crearPerfil(req, res) {
-  const id = +req.params.id;
-  const { nombre, edad, tutor } = req.body;
+async function tiempo (req, res) {
+  const id = +req.user.id;
+  const { redSocial, startTime, endTime } = req.body;
 
   try {
     // 1. Basic Validation
-    if (!nombre || !edad) {
-      return res.status(400).json({ message: "Faltan datos obligatorios (nombre y edad)." });
+    if (!startTime || !endTime) {
+      return res.status(400).json({ message: "Faltan datos obligatorios (tiempo)." });
     }
-    if (typeof nombre !== 'string' || nombre.trim() === '') {
+    if (typeof redSocial !== 'string' || redSocial.trim() === '') {
       return res.status(400).json({ message: "Nombre inválido. Debe ser una cadena no vacía." });
-    }
-    if (typeof edad !== 'number' || edad > 99) {
-      return res.status(400).json({ message: "Edad inválida. Debe ser un número de al menos 2 cifras." });
     }
 
     // 2. Database Validation
-    let connection;
+    
     try {
-      connection = await connectDB(); // Assume connectDB() returns a database connection
+      const connection = await connectDB(); // Assume connectDB() returns a database connection
       // Use id to get existing profile:
-      const [existingPerfil] = await connection.query(
-        'SELECT * FROM perfiles WHERE idUsuario = ?',
+      const [session] = await connection.query(
+        'SELECT * FROM tiempo_uso WHERE idUsuario = ?',
         [id] 
       ); 
-      if (existingPerfil.length > 0) {
-        return res.status(400).json({ message: "Ya existe un perfil para este usuario. ID: " + id});
-      }
     } catch (error) {
       console.error("Error connecting to database:", error);
       return res.status(500).json({ message: "Error interno del servidor al validar la base de datos." });
@@ -53,14 +47,14 @@ async function crearPerfil(req, res) {
     // 3. Insert
     try { 
       const [result] = await connection.query(
-          'INSERT INTO perfiles(idUsuario, nombre, edad, tutor) VALUES(?, ?, ?, ?)',
-          [id, nombre, edad, tutor]
+          'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final) VALUES(?, ?, ?, ?)',
+          [id, redSocial, startTime, endTime]
       );
-      res.json({ message: "Perfil creado", result });
+      res.json({ message: "datos guardados", result });
     } catch (error) {
       console.error("Error inserting into database:", error);
       // Log the error and return an appropriate error response
-      res.status(500).json({ message: "Error interno del servidor al crear el perfil." }); 
+      res.status(500).json({ message: "Error interno del servidor al guardar datos." }); 
     } 
   } catch (error) {
     console.error("General error:", error); 
@@ -69,7 +63,7 @@ async function crearPerfil(req, res) {
 } 
 
 
-  async function eliminarPerfil(req, res) {
+  async function eliminar(req, res) {
     try {
       const id = +req.params.id; 
       if (!id || isNaN(id)) {
@@ -79,7 +73,7 @@ async function crearPerfil(req, res) {
       const connection = await connectDB(); 
   
       // DELETE
-      const [results] = await connection.query('DELETE FROM perfiles WHERE idUsuario = ?', [id]); 
+      const [results] = await connection.query('DELETE FROM tiempo_uso WHERE idUsuario = ?', [id]); 
       if (results.affectedRows === 0) {
         return res.status(404).json({ message: "Perfil no encontrado" }); // perfil no encontrado
       } 
@@ -93,7 +87,7 @@ async function crearPerfil(req, res) {
   }
 
   export {
-    obtenerPerfil,
-    crearPerfil,
-    eliminarPerfil
+    obtenerTiempo,
+    tiempo,
+    eliminar
   };
