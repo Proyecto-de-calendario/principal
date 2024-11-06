@@ -82,7 +82,10 @@
 
     // Tu código JavaScript adicional (por ejemplo, para el temporizador)
   </script>
-  <script type="module" src="/main.js"></script>
-  <script type="module" src="/limitetiempo.js"></script>
+  <script type="module" src="../main.js"></script>
+  <script type="module">
+    import { limiteTiempo } from '../assets/limitetiempo.js';
+    limiteTiempo();
+  </script>
 </body>
 </html>

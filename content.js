@@ -1,39 +1,37 @@
-// Variables para el tiempo de interacción
-let interactionStart;
-let interactionTime = 0;
+let socialNetwork = null;
 
-function startInteraction() {
-  if (!interactionStart) {
-    interactionStart = Date.now();  // Inicia el temporizador de interacción
-  }
-}
-
-function stopInteraction() {
-  if (interactionStart) {
-    interactionTime += Date.now() - interactionStart;  // Calcula el tiempo de interacción
-    interactionStart = null;
-  }
-}
-
-// Agrega eventos para monitorear la interacción del usuario
-window.addEventListener('focus', startInteraction);
-window.addEventListener('blur', stopInteraction);
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    stopInteraction();
-  } else {
-    startInteraction();
+document.getElementById('webForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const timeLimitHours = parseInt(document.getElementById('timeLimitHours').value);
+  const timeLimitMinutes = parseInt(document.getElementById('timeLimitMinutes').value);
+  browser.runtime.sendMessage({ action: "setTimeLimit", hours: timeLimitHours, minutes: timeLimitMinutes });
+  
+});
+browser.runtime.onMessage.addListener((message) => {
+  if (message.action === "getSocialNetwork") {
+    const url = window.location.href;
+    socialNetwork = getSocialNetwork(url);
+    browser.runtime.sendMessage({ action: "socialNetwork", socialNetwork });
+  } else if (message.action === "logTime") {
+    console.log(`Tiempo en la red social ${socialNetwork}: ${message.timeSpent} segundos`);
+    // Aquí puedes enviar los datos al servidor o guardarlos en el almacenamiento
   }
 });
 
-// Eventos adicionales para capturar interacción más precisa (clics, teclas, scroll)
-document.addEventListener('mousedown', startInteraction);
-document.addEventListener('mouseup', stopInteraction);
-document.addEventListener('keydown', startInteraction);
-document.addEventListener('keyup', stopInteraction);
-document.addEventListener('scroll', startInteraction);
+function getSocialNetwork(url) {
+  const socialNetworks = {
+    'youtube.com': 'YouTube',
+    'facebook.com': 'Facebook',
+    'x.com': 'X',
+    'instagram.com': 'Instagram',
+    'tiktok.com': 'TikTok'
+  };
 
-window.addEventListener('beforeunload', () => {
-  stopInteraction();
-  chrome.runtime.sendMessage({ interactionTime });
-});
+  for (const network in socialNetworks) {
+    if (url.includes(network)) {
+      return socialNetworks[network];
+    }
+  }
+
+  return 'Unknown';
+}

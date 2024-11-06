@@ -1,32 +1,27 @@
-<!-- popup.html -->
+// popup.html
 <!DOCTYPE html>
-<html lang="es">
-<head>
+<html>
+  <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiempo en redes sociales</title>
+    <title>YouTube Time Tracker</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 10px;
-        }
-        h1 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        #time {
-            font-size: 16px;
-            font-weight: bold;
-        }
+      body {
+        width: 300px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      #time-spent {
+        font-size: 24px;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
-    <h1>Tiempo en redes sociales:</h1>
-    <p id="time">Cargando...</p>
-    <button id="reset">Reiniciar tiempo</button>
-
+  </head>
+  <body>
+    <h2>YouTube Time Tracker</h2>
+    <p>Time spent on YouTube: <span id="time-spent">0 seconds</span></p>
     <script src="popup.js"></script>
-</body>
+  </body>
 </html>
-
- 
