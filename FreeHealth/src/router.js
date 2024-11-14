@@ -1,6 +1,9 @@
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
 import { agenda } from "../assets/agenda.js";
+import { calendar } from "../assets/chart.js";
+import { saveTask } from "./guardarTarea.js";
+import { grafico } from "../assets/charts(date).js";
 import { charts } from "../assets/chart.js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
 import { validateSession } from "../session.js";
