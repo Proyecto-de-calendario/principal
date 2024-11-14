@@ -1,8 +1,9 @@
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
 import { agenda } from "../assets/agenda.js";
-import { charts } from "../assets/chart.js";
+import { calendar } from "../assets/chart.js";
 import { saveTask } from "./guardarTarea.js";
+import { grafico } from "../assets/charts(date).js";
 
 export async function router(path, app) {
 //  if (path !== "/" || path !== "/home") {
@@ -22,23 +23,22 @@ export async function router(path, app) {
     case "/signup":
       app.appendChild(logupPage());
       break;
-    case "/home":
-      window.location.pathname = '/pages/landingPage.html';
+    case "/home" :
+      document.addEventListener("DOMContentLoaded", app);;
       break;
     case "/tiempo":
       window.location.pathname = '/pages/limitetiempo.html';
       
       break;
-    case "/agenda":
+    case "/agenda" || '/pages/limitetiempo.html':
       window.location.pathname = '/pages/agenda.html';
       document.addEventListener("DOMContentLoaded", agenda,saveTask);
       break;
     case "/estadisticas":
-      window.location.pathname = '/pages/estadistica.html';
-      document.addEventListener("DOMContentLoaded", charts);
+      document.addEventListener("DOMContentLoaded", app.appendChild(calendar(),grafico()));
       break;
     default:
-      window.location.pathname = '/pages/landingPage.html';
+      window.location.href = '/home';
       break;
   }
 }

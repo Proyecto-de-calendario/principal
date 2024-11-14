@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeHealth - Gráficos Estadísticos</title>
+  <!-- Incluir Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
+<body>
+<div id = "app" class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
   <div class="container mx-auto">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-4">
@@ -17,13 +20,13 @@
       </div>
     </header>
 
-    <!-- Sección de Calendario (ahora en la parte superior) -->
+    <!-- Sección de Calendario -->
     <section id="calendario" class="py-20 bg-white">
       <h2 class="text-4xl font-bold text-indigo-600 mb-10">Calendario de Uso</h2>
       <div id="calendar"></div>
     </section>
 
-<!-- Sección de Estadísticas de Uso de Redes Sociales (debajo del calendario) -->
+    <!-- Sección de Estadísticas de Uso de Redes Sociales -->
     <section id="estadisticas" class="py-20 bg-white">
       <h2 class="text-4xl font-bold text-indigo-600 mb-10">Estadísticas de Uso de Redes Sociales</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -42,7 +45,7 @@
     <h3 class="text-2xl font-semibold text-center mb-4">¿En qué Afecta?</h3>
     <hr class="my-4 border-gray-300">
 
-<!-- Cards de impacto -->
+    <!-- Cards de impacto -->
     <div class="wrapper flex justify-center mt-8">
       <div class="cardContainer flex space-x-4">
         <!-- Card 1 -->
@@ -62,9 +65,9 @@
     </div>
 
     <!-- Modal para mostrar gráficos -->
-    <div id="modal" class="fixed inset-0 hidden z-50 flex items-center justify-center">
+    <div id="modal" class="fixed inset-0 z-50 items-center justify-center hidden">
       <div id="modal-overlay"></div>
-      <div class="bg-white p-8 rounded-lg w-3/4 md:w-1/2 lg:w-1/3 border border-gray-300 shadow-xl" >
+      <div class="bg-white p-8 rounded-lg w-3/4 md:w-1/2 lg:w-1/3 border border-gray-300 shadow-xl">
         <button id="closeModal" class="text-right text-gray-500 hover:text-gray-700">Cerrar</button>
         <h2 class="text-2xl font-bold text-indigo-600 mb-4">Estadísticas de Uso - Fecha seleccionada</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -84,14 +87,12 @@
       <p>&copy; 2024 FreeHealth. Todos los derechos reservados.</p>
     </footer>
   </div>
-  <script type="module" src="/main.js"></script>
-  <script type="module">
-    import { charts } from '../assets/chart.js';
-    charts();
-  </script>
-  <script>
 
-  // JavaScript para controlar la apertura y cierre del modal
+  <script type="module" src="/main.js"></script>
+
+
+  <script>
+    // JavaScript para controlar la apertura y cierre del modal
     const modal = document.getElementById("modal");
     const closeModalButton = document.getElementById("closeModal");
 
@@ -107,6 +108,7 @@
 
     // Lógica para abrir el modal al hacer clic en una fecha (añadir función en tu calendario)
     document.getElementById("calendar").addEventListener("click", openModal);
-    </script>
+  </script>
+</div>
 </body>
 </html>

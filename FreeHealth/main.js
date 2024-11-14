@@ -9,7 +9,3 @@ const app = document.getElementById("app");
 
 // función que se encarga de renderizar la página dependiendo de la ruta
 await router(path, app);
-
-document.addEventListener("DOMContentLoaded", () => {
-  createLogoutButton();
-  });
