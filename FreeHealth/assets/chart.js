@@ -1,7 +1,6 @@
 import { Chart, registerables } from 'chart.js';
 
 export const charts = () => {
-  document.addEventListener("DOMContentLoaded", () => {
     Chart.register(...registerables);
 
     // Gráfico de Distribución del Tiempo en Redes Sociales
@@ -51,6 +50,4 @@ export const charts = () => {
         responsive: true
       }
     });
-  });
-};
-
+  };

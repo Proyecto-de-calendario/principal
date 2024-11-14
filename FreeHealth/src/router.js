@@ -16,27 +16,30 @@ export async function router(path, app) {
       app.appendChild(logupPage());
       break;
     case "/home":
-      window.location.href = '/pages/landingPage.html';
+    case "/pages/landingPage.html":
       await loadPage('/pages/landingPage.html', app);
       break;
     case "/tiempo":
-      window.location.href = '/pages/limitetiempo.html';
+    case "/pages/limitetiempo.html":
       await loadPage('/pages/limitetiempo.html', app);
       limiteTiempo();
       break;
     case "/agenda":
-      window.location.href = '/pages/agenda.html';
+    case "/pages/agenda.html":
       await loadPage('/pages/agenda.html', app);
       agenda();
       break;
     case "/estadisticas":
-      window.location.href = '/pages/estadistica.html';
-      await loadPage('/pages/estadistica.html', app);
-      charts();
+    case "/pages/estadistica.html":
+      await loadPage('/pages/estadistica.html',app);
+      app.appendChild(charts());
       break;
+      case "/nosotros":
+      case "/pages/about.html":
+        await loadPage('/pages/about.html', app);
+        break;
     default:
-      window.location.href = '/pages/landingPage.html';
-      await loadPage('/pages/landingPage.html', app);
+      window.location.href = "/home";
       break;
   }
 }
