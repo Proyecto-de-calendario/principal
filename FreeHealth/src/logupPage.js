@@ -104,7 +104,7 @@ export const logupPage = () => {
       "px-4",
       "rounded"
     );
-    submitButton.textContent = "signin";
+    submitButton.textContent = "registrarse";
   
     form.appendChild(title);
     form.appendChild(nameInput);

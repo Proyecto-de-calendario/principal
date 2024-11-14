@@ -19,7 +19,7 @@ async function obtenerTiempo(req, res) {
 } 
 async function tiempo (req, res) {
   const id = +req.user.id;
-  const { redSocial, startTime, endTime } = req.body;
+  const { redSocial, startTime, endTime, duration } = req.body;
 
   try {
     // 1. Basic Validation
@@ -47,8 +47,8 @@ async function tiempo (req, res) {
     // 3. Insert
     try { 
       const [result] = await connection.query(
-          'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final) VALUES(?, ?, ?, ?)',
-          [id, redSocial, startTime, endTime]
+          'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final, duracion) VALUES(?, ?, ?, ?, ?)',
+          [id, redSocial, startTime, endTime, duration]
       );
       res.json({ message: "datos guardados", result });
     } catch (error) {
@@ -61,7 +61,6 @@ async function tiempo (req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 } 
-
 
   async function eliminar(req, res) {
     try {
