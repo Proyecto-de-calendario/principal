@@ -11,7 +11,7 @@ export function createLogoutButton() {
     "text-white",
     "hover:bg-red-700"
   );
-  logoutBtn.textContent = "Logout";
+  logoutBtn.textContent = "Abandonar Sesión";
   navbar.appendChild(logoutBtn);
 
   // Manejar el clic del botón de logout
@@ -40,5 +40,5 @@ async function handleLogout() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", createLogoutButton);
+document.addEventListener("DOMContentLoaded", app.appendChild(createLogoutButton()));
   
