@@ -1,14 +1,21 @@
+// router.js en el cliente
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
 import { initCalendar, showModal, closeModal, bindCloseModalEvent  } from "../assets/chart(calendar).js";
 import { saveTask } from "./saveTasks.js";
 import { grafico } from "../assets/charts(date).js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
-import { validateSession } from "../session.js";
 import { agenda } from "../assets/agenda.js";
 
 export async function router(path, app) {
   app.innerHTML = ''; // Limpiar contenido anterior
+
+  // Verificar sesión para rutas protegidas
+  const protectedRoutes = [ "/tiempo", "/agenda", "/estadisticas"];
+  if (protectedRoutes.includes(path) && !(await isValidSession())) {
+    app.appendChild(loginPage());
+    return;
+  }
 
   switch (path) {
     case "/":
@@ -71,5 +78,25 @@ async function loadPage(url, app) {
     app.innerHTML = html;
   } catch (error) {
     console.error('Error loading page:', error);
+  }
+}
+async function isValidSession() {
+  try {
+    const response = await fetch('http://localhost:3000/auth/session', {
+      method: "GET",
+      credentials: "include", // Importante para enviar las cookies de sesión
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error("Invalid session");
+    }
+
+    const data = await response.json();
+    return data.user ? true : false;
+  } catch (error) {
+    console.error('Error validating session:', error);
+    return false;
   }
 }
