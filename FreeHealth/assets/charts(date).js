@@ -1,5 +1,8 @@
+import {Chart, registerables} from 'chart.js';
 // Función principal para renderizar los gráficos con datos de la fecha seleccionada
 export const grafico = (date) => {
+
+  Chart.register(...registerables);
   //Obtener datos filtrados para la fecha seleccionada
   const filteredData = fetchDataByDate(date);
   
@@ -13,7 +16,7 @@ export const grafico = (date) => {
     type: "pie",
     data: filteredData.pieChartData,
     options: {
-      responsive: true,
+      responsive: false,
       maintainAspectRatio: false, // Importante para el tamaño dinámico
     },
   });
@@ -23,7 +26,7 @@ export const grafico = (date) => {
     type: "line",
     data: filteredData.lineChartData,
     options: {
-      responsive: true,
+      responsive: false,
       maintainAspectRatio: false, // Ajuste para responsividad
       scales: {
         x: {

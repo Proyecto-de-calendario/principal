@@ -5,6 +5,8 @@ export const agenda = () => {
       const taskModal = document.getElementById('task-modal');
       const openModalBtn = document.getElementById('open-modal');
       const closeModal = taskModal.querySelector('.close');
+
+      console.log(openModalBtn)
   
       let tasks = [];
   

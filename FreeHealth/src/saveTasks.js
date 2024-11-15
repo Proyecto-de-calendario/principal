@@ -11,7 +11,7 @@ export async function saveTask() {
       endTime: document.getElementById('task-time-end').value,
       date: document.getElementById('task-date').value,
     };
-
+    
     try {
       const response = await fetch('http://localhost:3000/tasks', {
         method: 'POST',

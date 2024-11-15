@@ -10,24 +10,34 @@ export function agenda() {
     } catch (error) {
       console.error('Error al cargar las tareas:', error);
     }
+  });
 
-    document.getElementById('open-modal').addEventListener('click', () => {
-      document.getElementById('task-modal').classList.remove('hidden');
-      saveTask(); // Llama a saveTask solo cuando necesites guardar una tarea nueva
-    });
-
-    document.querySelector('.close').addEventListener('click', () => {
+  document.getElementById("open-modal").addEventListener('click', () => {
+    document.getElementById('task-modal').classList.remove('hidden');
+    saveTask(); // Limpiar el formulario al abrir el modal
+  });
+  
+  document.querySelector('.close').addEventListener('click', () => {
+    document.getElementById('task-modal').classList.add('hidden');
+    clearForm();
+  });
+  
+  window.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('task-modal')) {
       document.getElementById('task-modal').classList.add('hidden');
       clearForm();
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === document.getElementById('task-modal')) {
-        document.getElementById('task-modal').classList.add('hidden');
-        clearForm();
-      }
-    });
+    }
   });
+  
+  // Asegurarse de que el formulario llame a saveTask cuando se envíe
+  document.getElementById('task-form').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Evitar el comportamiento por defecto de enviar el formulario
+    await saveTask();  // Guardar la tarea después de que el usuario complete el formulario
+    document.getElementById('task-modal').classList.add('hidden'); // Cerrar el modal
+    clearForm(); // Limpiar el formulario
+  });
+
+  
 
   function clearForm() {
     document.getElementById('task-id').value = '';

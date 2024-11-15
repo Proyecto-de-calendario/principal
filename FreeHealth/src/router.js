@@ -1,12 +1,11 @@
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
-import { agenda } from "../assets/agenda.js";
-import { calendar } from "../assets/chart.js";
-import { saveTask } from "./guardarTarea.js";
+import { initCalendar, showModal, closeModal, bindCloseModalEvent  } from "../assets/chart(calendar).js";
+import { saveTask } from "./saveTasks.js";
 import { grafico } from "../assets/charts(date).js";
-import { charts } from "../assets/chart.js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
 import { validateSession } from "../session.js";
+import { agenda } from "../assets/agenda.js";
 
 export async function router(path, app) {
   app.innerHTML = ''; // Limpiar contenido anterior
@@ -31,16 +30,34 @@ export async function router(path, app) {
     case "/pages/agenda.html":
       await loadPage('/pages/agenda.html', app);
       agenda();
+      saveTask();
       break;
     case "/estadisticas":
     case "/pages/estadistica.html":
-      await loadPage('/pages/estadistica.html',app);
-      app.appendChild(charts());
+      await loadPage('/pages/estadistica.html', app);
+
+      // Inicializar calendario
+      const calendarEl = document.getElementById("calendar");
+      if (calendarEl) {
+        initCalendar(calendarEl, (date) => {
+          console.log(`Fecha seleccionada: ${date}`);
+        });
+      } else {
+        console.error("No se encontró el elemento 'calendar' en estadistica.html");
+      }
+
+      // Manejo de modales
+      showModal();
+      closeModal();
+      bindCloseModalEvent();
+
+      // Generar gráficos
+      grafico();
       break;
-      case "/nosotros":
-      case "/pages/about.html":
-        await loadPage('/pages/about.html', app);
-        break;
+    case "/nosotros":
+    case "/pages/about.html":
+      await loadPage('/pages/about.html', app);
+      break;
     default:
       window.location.href = "/home";
       break;
