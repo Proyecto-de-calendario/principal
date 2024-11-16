@@ -1,21 +1,20 @@
-export const validateSession = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/session', {
-        credentials: 'include',
-      });
-  
-      if (response.ok) {
-        const user = await response.json();
-        if (user) {
-            return true
-        }
-        return false;
-      }
-  
-    } catch (error) {
-      console.error('Error validating session:', error);
+export async function isValidSession() {
+  try {
+    const response = await fetch('http://localhost:3000/auth/session', {
+      method: "GET",
+      credentials: "include", // Importante para enviar las cookies de sesión
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      throw new Error("Invalid session");
     }
-  
+
+    const data = await response.json();
+    return data.user ? true : false;
+  } catch (error) {
+    console.error('Error validating session:', error);
     return false;
-  };
-  
+  }
+}
