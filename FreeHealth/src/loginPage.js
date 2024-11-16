@@ -112,8 +112,17 @@ export const loginPage = () => {
     // Validación básica
     if (!email || !password) {
       divError.innerText = "Por favor, completa todos los campos.";
+      divError.classList.add(
+        "bg-red-500",
+        "text-white",
+        "text-center",
+        "rounded",
+        "p-2",
+        "mt-3"
+      );
       return;
     }
+
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -127,7 +136,7 @@ export const loginPage = () => {
       if (!response.ok) {
         divError.innerText = "Credenciales inválidas";
         divError.classList.add(
-          "bg-danger",
+          "bg-red-500",
           "text-white",
           "text-center",
           "rounded",
@@ -143,10 +152,9 @@ export const loginPage = () => {
       }
 
       const data = await response.json();
-      console.log(data);
       window.location.pathname = "/home";
     } catch (error) {
-      console.log("error");
+      console.log("error", error);
     }
   });
 

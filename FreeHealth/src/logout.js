@@ -1,25 +1,20 @@
 export function createLogoutButton() {
   const navbar = document.querySelector("nav");
-  if (!navbar) {
-    console.error("Navbar not found!");
-    return;
-  }
-  
+
   const logoutBtn = document.createElement("button");
   logoutBtn.classList.add(
     "bg-red-500",
     "text-white",
     "hover:bg-red-700"
   );
-  logoutBtn.textContent = "Logout";
-  navbar.appendChild(logoutBtn);
+  logoutBtn.textContent = "Abandonar Sesión";
+  // navbar.appendChild(logoutBtn);
 
   // Manejar el clic del botón de logout
   logoutBtn.addEventListener("click", handleLogout);
 }
 
 async function handleLogout() {
- 
   try {
     const response = await fetch('http://localhost:3000/auth/logout', {
       method: 'POST',
@@ -39,6 +34,3 @@ async function handleLogout() {
     console.error('Logout error:', error);
   }
 }
-
-document.addEventListener("DOMContentLoaded", createLogoutButton);
-  

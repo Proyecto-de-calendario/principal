@@ -6,14 +6,14 @@
   <title>FreeHealth</title>
   
 </head>
-<body class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
+<body id = "app" class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 bg-opacity-75">
   <div class="container mx-auto">
     <header class="bg-white shadow-md">
       <div class="flex justify-between items-center py-4">
         <h1 class="text-2xl font-bold">FreeHealth</h1>
         <nav class="space-x-4">
           <a href="#funciones" class="text-gray-500 hover:text-indigo-500">Funciones</a>
-          <a href="estadistica.html" class="text-gray-500 hover:text-indigo-500">Estadisticas</a>
+          <a href="estadisticas" class="text-gray-500 hover:text-indigo-500">Estadisticas</a>
         </nav>
       </div>
     </header>
@@ -21,31 +21,31 @@
     <section class="bg-indigo-600 text-white py-20">
       <h1 class="text-5xl font-bold">Organiza tu Tiempo y Reduce Distracciones</h1>
       <p class="text-lg mt-4">Descubre cómo nuestro calendario puede ayudarte a gestionar tus actividades y disminuir el uso de redes sociales.</p>
-      <a href="about.html" class="bg-white text-indigo-600 py-2 px-4 rounded">Saber Más</a>
+      <a href="nosotros" class="bg-white text-indigo-600 py-2 px-4 rounded">Saber Más</a>
     </section>
 
     <section id="funciones" class="py-20">
       <h2 class="text-4xl font-bold mb-10">Funciones Clave</h2>
     </section>
 
-    <div class="flex flex-wrap justify-center md:space-x-6 space-y-6 md:space-y-0">
+    <div class="flex flex-wrap justify-center gap-6">
       <!-- Primera tarjeta -->
-      <div class="card p-6 max-w-sm bg-white shadow-md rounded-lg w-full md:w-auto">
+      <div class="card p-6 max-w-sm bg-white shadow-md rounded-lg flex-grow">
         <div class="box text-center">
           <i class="fa fa-calendar-check-o text-gray-700 text-4xl"></i>
           <h4 class="text-xl font-bold mt-4">Agenda Digital</h4>
           <p class="text-gray-600 mt-2">Utiliza nuestra agenda digital para poder añadir tus tareas importantes y mantenerte enfocado en lo que haces.</p>
-          <a href="agenda.html" class="inline-block mt-4 px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full transition duration-300">Descúbrelo</a>
+          <a href="agenda" class="inline-block mt-4 px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full transition duration-300">Descúbrelo</a>
         </div>
       </div>
     
       <!-- Segunda tarjeta -->
-      <div class="card p-6 max-w-sm bg-white shadow-md rounded-lg w-full md:w-auto">
+      <div class="card p-6 max-w-sm bg-white shadow-md rounded-lg flex-grow">
         <div class="box text-center">
           <i class="fa fa-clock-o text-gray-700 text-4xl"></i>
           <h4 class="text-xl font-bold mt-4">Límite de tiempo</h4>
           <p class="text-gray-600 mt-2">Utiliza nuestro límite de tiempo para poder cargar la cantidad de tiempo que deseas poner en cada página web y así mantenerte vigente.</p>
-          <a href="limitetiempo.html" class="inline-block mt-4 px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full transition duration-300">Descúbrelo</a>
+          <a href="tiempo" class="inline-block mt-4 px-6 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-full transition duration-300">Descúbrelo</a>
         </div>
       </div>
     </div>
@@ -54,6 +54,6 @@
       <p>&copy; 2024 FreeHealth. Todos los derechos reservados.</p>
     </footer>
   </div>
-  <script type="module" src="/main.js"></script>
+  <script type="module" src="../main.js"></script>
 </body>
 </html>

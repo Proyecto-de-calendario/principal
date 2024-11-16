@@ -1,40 +1,41 @@
 import   { hashSync,compareSync }  from 'bcrypt';
 import {generateJWT} from '../helpers/generarJWT.js';
-import {validateJWT} from '../helpers/validarJWT.js';
+import {validateTokenJWT} from '../helpers/validateToken.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
-async function login (req, res) {
+async function login(req, res) {
   const { email, password } = req.body;
-const sql = "SELECT * FROM usuarios WHERE email = ?";
+  const sql = "SELECT * FROM usuarios WHERE email = ?";
 
   try {
     const connection = await connectDB();
-    const row = await connection.query(sql, email);
-    const user = row[0][0];
+    const [rows] = await connection.query(sql, [email]);
+    const user = rows[0];
+    
     if (!user) {
-      return res.status(401).json({ message: "no existe el usuario" });
+      connection.end();
+      return res.status(401).json({ message: "Usuario no existe" });
     }
-    const isPasswordValid = compareSync (password,user.contraseña ); 
-    // Validación de usuario
-    if (user.length === 0) {
-      return res.status(401).json({ message: "no existe el usuario" });
-    }
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid password" });
-    } else {
 
-      // Generar token JWT
-      const token = await generateJWT(user.idUsuario);
-      // Almacenar el token en la sesión del servidor
-      req.session.token = token;
-      // Almacenar el token en una cookie segura
-      res.cookie("authToken", token, {
-        httpOnly: true, // La cookie no es accesible desde JavaScript
-        secure: false, // Cambiar a true en producción con HTTPS
-        maxAge: 3600000, // Expiración en milisegundos (1 hora)
-      });
-      return res.json({ message: "Inicio de sesión exitoso" });
+    const isPasswordValid = compareSync(password, user.contraseña);
+    if (!isPasswordValid) {
+      connection.end();
+      return res.status(401).json({ message: "Contraseña inválida" });
     }
+
+    // Generar token JWT
+    const token = await generateJWT(user.idUsuario);
+    // Almacenar el token en la sesión del servidor
+    req.session.token = token;
+    // Almacenar el token en una cookie segura
+    res.cookie("authToken", token, {
+      httpOnly: true, // La cookie no es accesible desde JavaScript
+      secure: false, // Cambiar a true en producción con HTTPS
+      maxAge: 3600000, // Expiración en milisegundos (1 hora)
+    });
+
+    connection.end();
+    return res.json({ message: "Inicio de sesión exitoso" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Error Inesperado" });
@@ -90,7 +91,7 @@ async function createUser(req, res) {
     const token = req.headers.token;
 
         // Utilizamos el helper para validar el token.
-        const usuario = await validateJWT(token);
+        const usuario = await validateTokenJWT(token);
         // delete query
       const connection = await connectDB();
       const [results] = await connection.query('DELETE FROM usuarios WHERE idUsuario = ?', [usuario.idUsuario]);
@@ -150,58 +151,32 @@ async function createUser(req, res) {
     }
   }
 
-  async function modifyUser() {
-    
-      const { nombre, email, contrasenia } = req.body;
-  try {
-      const connection = await connectDB();
-      // 3. Validar existencia de usuario
-      const [existeUsuario] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
-      if (existeUsuario.length > 0) {
-        return res.status(400).json({ error: 'El correo electrónico ya está en uso.' });
-        
+  export async function validateSession(req, res) {
+    try {
+      const token = req.cookies.authToken || req.session.token; // Obtener el token de la cookie o sesión
+      console.log('Token:', token); // Verificar el valor del token en la consola
+  
+      if (!token) {
+        return res.status(401).json({ message: "No se proporcionó token" });
       }
   
-      // 4. Validacion de nombre
-      if (!nombre || nombre.length < 3) {
-        return res.status(400).json({ error: 'Nombre debe tener al menos 3 caracteres.' });
-      }
-  
-      const id = Math.floor(Math.random() * Math.pow(10, 9));
-      const hashContrasenia = hashSync(contrasenia, 10); 
-  
-      const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
-      await connection.query(sql, [id, nombre, email, hashContrasenia]);
+      const user = await validateTokenJWT(token); // Verificar el token
       
-      res.json({
-        msg: 'Registrado correctamente'
-      });
-      connection.end(); 
+      if (user) {
+        req.user = user; // Asigna el usuario al objeto req
+        return res.json({
+          message: "Acceso permitido a área protegida",
+          user: req.user,
+        });
+      } else {
+        return res.status(401).json({ message: "Acceso denegado" });
+      }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error validando la sesión:', error);
+      return res.status(500).json({ message: "Error interno del servidor" });
     }
-  } 
-
-export async function validateSession(req, res) {
-  try {
-    const user = validateJWT(req); // Asegúrate de pasar `req` a la función `validateJWT`
-    
-    if (user) {
-      req.user = user; // Asigna el usuario al objeto `req`
-      return res.json({
-        message: "Acceso permitido a área protegida",
-        user: req.user,
-      });
-    } else {
-      return res.status(401).json({ message: "Acceso denegado" });
-    }
-  } catch (error) {
-    console.error('Error validando la sesión:', error);
-    return res.status(500).json({ message: "Error interno del servidor" });
   }
-}
-
+  
 
       async function logout(req, res) {
     try {
@@ -223,6 +198,5 @@ export async function validateSession(req, res) {
     createUser,
     removeUser,
     verifyUser,
-    modifyUser,
     logout
   };

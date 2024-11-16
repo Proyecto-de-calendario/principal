@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "Tiempo en YouTube",
+  "version": "1.0",
+  "description": "Mide el tiempo activo en YouTube",
+  "permissions": ["tabs", "storage", "activeTab", "notifications"],
+  "background": {
+    "scripts": ["timeTracker.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*", "*://www.facebook.com/*", "*://www.x.com/*","*://www.instagram.com/*","*://www.tiktok.com/*" ],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_popup": "FreeHealth/pages/limitetiempo.html",
+    "default_icon": {
+      "16": "FreeHealth/assets/icons/icon16.png",
+      "48": "FreeHealth/assets/icons/icon48.png",
+      "128": "FreeHealth/assets/icons/icon128.png"
+    }
+  }
+}
