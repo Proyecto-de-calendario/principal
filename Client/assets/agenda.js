@@ -1,3 +1,4 @@
+import { loadTasks } from './loadTasks.js';
 import { saveTask } from '../src/saveTasks.js';
 import { editTask } from '../src/editTasks.js';
 import { deleteTask } from '../src/deleteTask.js';
@@ -28,7 +29,6 @@ export function agenda() {
       clearForm();
     }
   });
-  
   // Asegurarse de que el formulario llame a saveTask cuando se envíe
   document.getElementById('task-form').addEventListener('submit', async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto de enviar el formulario
@@ -36,31 +36,12 @@ export function agenda() {
     document.getElementById('task-modal').classList.add('hidden'); // Cerrar el modal
     clearForm(); // Limpiar el formulario
   });
-
+}
   
 
   function clearForm() {
     document.getElementById('task-id').value = '';
     document.getElementById('task-form').reset();
-  }
-
-  async function loadTasks() {
-    try {
-      const response = await fetch('http://localhost:3000/tasks', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Error al cargar las tareas');
-      }
-      const tasksData = await response.json();
-      return tasksData;
-    } catch (error) {
-      console.error('Error al cargar las tareas:', error);
-      throw error;
-    }
   }
 
   function renderTasks(tasks) {
@@ -98,4 +79,3 @@ export function agenda() {
       });
     });
   }
-}

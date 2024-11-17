@@ -1,20 +1,21 @@
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
-import { initCalendar, showModal, closeModal, bindCloseModalEvent  } from "../assets/chart(calendar).js";
-import { saveTask } from "./saveTasks.js";
+import { initCalendar, showModal, closeModal, bindCloseModalEvent } from "../assets/chart(calendar).js";
 import { grafico } from "../assets/charts(date).js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
 import { isValidSession } from "../session.js";
 import { agenda } from "../assets/agenda.js";
+import { renderCalendar } from "../assets/calendar.js"; // Ajustado aquí
+import { loadTasks } from "../assets/loadTasks.js";
 
 export async function router(path, app) {
   app.innerHTML = ''; // Limpiar contenido anterior
- // Verificar sesión para rutas protegidas
- const protectedRoutes = [ "/tiempo", "/agenda", "/estadisticas"];
- if (protectedRoutes.includes(path) && !(await isValidSession())) {
-   app.appendChild(loginPage());
-   return;
- }
+  // Verificar sesión para rutas protegidas
+  const protectedRoutes = [ "/tiempo", "/agenda", "/estadisticas"];
+  if (protectedRoutes.includes(path) && !(await isValidSession())) {
+    app.appendChild(loginPage());
+    return;
+  }
   switch (path) {
     case "/":
       app.appendChild(loginPage());
@@ -34,9 +35,9 @@ export async function router(path, app) {
     case "/agenda":
     case "/pages/agenda.html":
       await loadPage('/pages/agenda.html', app);
-      calendarEl();
+      const tasks = await loadTasks();
       agenda();
-      saveTask();
+      renderCalendar(tasks); // Renderiza el calendario con tareas
       break;
     case "/estadisticas":
     case "/pages/estadistica.html":

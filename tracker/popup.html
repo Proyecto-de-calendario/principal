@@ -1,27 +1,24 @@
-// popup.html
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>YouTube Time Tracker</title>
-    <style>
-      body {
-        width: 300px;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-      }
-      h2 {
-        margin-top: 0;
-      }
-      #time-spent {
-        font-size: 24px;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <h2>YouTube Time Tracker</h2>
-    <p>Time spent on YouTube: <span id="time-spent">0 seconds</span></p>
-    <script src="popup.js"></script>
-  </body>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datos de Interacciones</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .interaction {
+      margin-bottom: 10px;
+    }
+    .interaction-header {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Datos de Interacciones</h1>
+  <div id="interactions"></div>
+  <script src="popup.js"></script>
+</body>
 </html>

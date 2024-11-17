@@ -5,8 +5,6 @@ export async function isValidSession() {
       credentials: "include", // Importante para enviar las cookies de sesión
     });
 
-    console.log(response);
-
     if (!response.ok) {
       throw new Error("Invalid session");
     }

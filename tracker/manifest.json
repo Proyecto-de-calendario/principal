@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Tiempo en YouTube",
+  "name": "Tiempo en redes",
   "version": "1.0",
-  "description": "Mide el tiempo activo en YouTube",
+  "description": "Mide el tiempo activo en redes sociales",
   "permissions": ["tabs", "storage", "activeTab", "notifications"],
   "background": {
     "scripts": ["timeTracker.js"],
@@ -15,7 +15,7 @@
     }
   ],
   "browser_action": {
-    "default_popup": "FreeHealth/pages/limitetiempo.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "FreeHealth/assets/icons/icon16.png",
       "48": "FreeHealth/assets/icons/icon48.png",

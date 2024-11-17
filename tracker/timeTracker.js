@@ -1,19 +1,34 @@
+// Escuchar mensajes desde limiteTiempo.js
+window.addEventListener('message', (event) => {
+  if (event.data) {
+    console.log('Datos recibidos del formulario:', event.data);
+    handleFormData(event.data);
+  }
+});
+
+function handleFormData(data) {
+  // Manejar los datos del formulario aquí
+  console.log(`Red social: ${data.pageURL}, Límite: ${data.remainingHours} horas y ${data.remainingMinutes} minutos`);
+
+  // Aquí puedes agregar el manejo necesario como actualizar el estado, guardar en localStorage, etc.
+}
+
+// Ejemplo del código existente para conectarse al servidor WebSocket y otras funcionalidades
 let activeTabId = null;
 let startTime = null;
 let endTime = null;
 let interactions = {};
-let timeLimits = {}; // Guardar los límites de tiempo por página
-let intervalId = null;
-let currentSocialNetwork = null; // Guardar la red social actual
 
-// Verificar si la URL pertenece a una red social
+// Conectar al servidor WebSocket
+const socket = new WebSocket('ws://localhost:4000');
+
+// Definir las redes sociales que se monitorearán
 const socialNetworks = ['youtube.com', 'facebook.com', 'x.com', 'instagram.com', 'tiktok.com'];
 
 function isSocialNetwork(url) {
   return socialNetworks.some(network => url.includes(network));
 }
 
-// Obtener el nombre de la red social a partir de la URL
 function getSocialNetwork(url) {
   const socialNetworks = {
     'youtube.com': 'YouTube',
@@ -28,11 +43,9 @@ function getSocialNetwork(url) {
       return socialNetworks[network];
     }
   }
-
   return 'Unknown';
 }
 
-// Manejar la activación de pestañas
 browser.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await browser.tabs.get(activeInfo.tabId);
   if (isSocialNetwork(tab.url)) {
@@ -41,15 +54,12 @@ browser.tabs.onActivated.addListener(async (activeInfo) => {
     }
     activeTabId = activeInfo.tabId;
     startTime = new Date();
-    interactions = []; // Resetear las interacciones
-    currentSocialNetwork = getSocialNetwork(tab.url); // Obtén la red social actual
-    startTimeTracker(tab.url);
+    currentSocialNetwork = getSocialNetwork(tab.url);
   } else if (activeTabId) {
     endInteraction();
   }
 });
 
-// Manejar la actualización de pestañas
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (tabId === activeTabId && changeInfo.status === 'complete') {
     if (!isSocialNetwork(tab.url)) {
@@ -58,76 +68,53 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   }
 });
 
-// Manejar los mensajes recibidos
-browser.runtime.onMessage.addListener((message) => {
-  if (message.action === "setTimeLimit") {
-    timeLimits[message.pageName] = message.timeLimit;
-  }
-});
-
-// Finalizar la interacción
 function endInteraction() {
   endTime = new Date();
   if (startTime && endTime) {
-    logInteraction(currentSocialNetwork); // Pasa la red social actual
+    logInteraction(currentSocialNetwork);
   }
   activeTabId = null;
   startTime = null;
   endTime = null;
-  currentSocialNetwork = null; // Restablece la red social actual
-  clearInterval(intervalId);
-  intervalId = null;
+  currentSocialNetwork = null;
 }
 
-// Registrar la interacción
 function logInteraction(socialNetwork) {
   const duration = Math.floor((endTime - startTime) / 1000);
-  console.log(`Fecha y hora de ingreso: ${startTime}`);
-  console.log(`Fecha y hora de cierre: ${endTime}`);
-  console.log(`Tiempo de interacción en ${socialNetwork}: ${duration} segundos`);
-  
-  // Guardar la interacción en el objeto `interactions`
+  console.log(`Tiempo en ${socialNetwork}: ${duration} segundos`);
+
   if (!interactions[socialNetwork]) {
     interactions[socialNetwork] = [];
   }
   interactions[socialNetwork].push({ startTime, endTime, duration });
 
-  // Guardar las interacciones en `localStorage`
-  localStorage.setItem('interactions', JSON.stringify(interactions));
+  sendInteractionData({ socialNetwork, startTime, endTime, duration });
+}
 
-  // Verificar que el receptor esté disponible antes de enviar el mensaje
-  if (browser.runtime) {
-    browser.runtime.sendMessage({ action: "logTime", timeSpent: duration, socialNetwork })
-      .catch(err => console.error("Error sending message:", err));
+// Enviar datos al servidor mediante WebSocket
+function sendInteractionData(data) {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(data));
+    console.log('Datos enviados exitosamente:', data);
   } else {
-    console.error("No runtime available to send message.");
+    console.error('WebSocket no está conectado.');
   }
 }
 
-// Recuperar las interacciones desde `localStorage`
-function loadInteractions() {
-  const storedInteractions = localStorage.getItem('interactions');
-  if (storedInteractions) {
-    interactions = JSON.parse(storedInteractions);
-  }
-}
+// Manejar mensajes del servidor
+socket.addEventListener('message', (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Mensaje recibido del servidor:', data);
+});
 
-// Llamar a `loadInteractions` cuando se carga el script
-loadInteractions();
+socket.addEventListener('open', () => {
+  console.log('Conexión WebSocket establecida.');
+});
 
-// Iniciar el rastreo de tiempo
-function startTimeTracker(url) {
-  const pageName = getSocialNetwork(url);
-  if (intervalId) clearInterval(intervalId); // Evitar múltiples intervalos
-  intervalId = setInterval(() => {
-    const currentTime = new Date();
-    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
-    console.log(`Tiempo de interacción continuo: ${elapsedTime} segundos`);
-    
-    // Verificar si se ha alcanzado el límite de tiempo
-    if (timeLimits[pageName] && elapsedTime * 1000 > timeLimits[pageName]) {
-      alert(`Has alcanzado el límite de tiempo para ${pageName}`);
-      endInteraction();
-    }
-  }, 1000); // Cada segundo
-}
+socket.addEventListener('error', (error) => {
+  console.error('Error en la conexión WebSocket:', error);
+});
+
+socket.addEventListener('close', () => {
+  console.log('Conexión WebSocket cerrada.');
+});
