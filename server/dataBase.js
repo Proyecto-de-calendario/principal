@@ -9,7 +9,7 @@ const connectDB = async ()=> {
         port: 3306,
         user: 'root',
         password: '',
-        database: 'proyecto_calendario'
+        database: 'freehealth_database'
     })
 } catch (error){
 res.json({error})

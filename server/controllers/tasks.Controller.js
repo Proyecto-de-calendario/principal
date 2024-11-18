@@ -1,23 +1,22 @@
 import { connectDB } from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function tasks(req, res) {
-  const id = +req.user.id;
-  
   try {
+
+  const id = +req.user.id;
     const connection = await connectDB();
     const [results] = await connection.query('SELECT * FROM tareas WHERE idUsuario = ?', [id]);
-    return res.json(results);
+    return res.json([results]);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal server error" }); // error del servidor
   }
 }
 
 async function findTask(req, res) {
+  try {
   const id = +req.user.id;
   const tarea = req.params.id;
-  
-  try {
+
     const connection = await connectDB();
     const [results] = await connection.query('SELECT * FROM tareas WHERE idUsuario = ? and idTarea = ?', [id,tarea]);
     return res.json(results);
@@ -28,10 +27,10 @@ async function findTask(req, res) {
 }
 
  async function createTask(req, res) {
+  try {
   const id = req.user.id;
   const { name, priority, startTime, endTime, date } = req.body;
-console.log(req.body)
-  try {
+  
     const connection = await connectDB();
 
     // Insertar nueva tarea

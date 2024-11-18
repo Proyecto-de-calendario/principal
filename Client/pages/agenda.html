@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded">
 </head>
 
-<body></body>
+<body>
 <div id="app">
   <div class="container mx-auto">
     <header class="bg-white shadow-md">
@@ -38,13 +38,13 @@
       <hr class="my-2">
       <div class="wrapper bg-white p-4 rounded-lg shadow">
         <header class="flex justify-between items-center mb-4">
-          <p class="current-date text-lg"></p>
+          <p id="current-date" class="text-lg"></p>
           <div class="icons flex space-x-2">
             <span id="prev" class="material-symbols-rounded cursor-pointer">chevron_left</span>
             <span id="next" class="material-symbols-rounded cursor-pointer">chevron_right</span>
           </div>
         </header>
-        <div class="calendar grid grid-cols-7 gap-2 text-center">
+        <div id="calendar" class="grid grid-cols-7 gap-2 text-center">
           <!-- Cabeceras de la semana -->
           <div class="weeks font-bold">Dom</div>
           <div class="weeks font-bold">Lun</div>
@@ -96,8 +96,9 @@
       <div class="agenda-container bg-white p-4 rounded-lg shadow">
         <h1 class="text-2xl">Agenda</h1>
         <button id="open-modal" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Añadir Tarea</button>
-        <div id="task-list" class="mt-6">
-          <h2 class="text-lg font-semibold">Tareas</h2>
+         <h2 class="text-lg font-semibold">Tareas</h2>
+         <div id="task-list" class="mt-6">
+         
         </div>
       </div>
 

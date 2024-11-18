@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-10-2024 a las 20:25:54
+-- Tiempo de generación: 18-11-2024 a las 02:12:42
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `proyecto_calendario`
+-- Base de datos: `freehealth_database`
 --
 
 -- --------------------------------------------------------
@@ -32,10 +32,17 @@ CREATE TABLE `tareas` (
   `idUsuario` int(10) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `prioridad` int(1) NOT NULL,
-  `horaInicio` varchar(20) NOT NULL,
-  `horaFin` varchar(20) NOT NULL,
+  `fechaInicio` varchar(20) NOT NULL,
+  `fechaFin` varchar(20) NOT NULL,
   `dia` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tareas`
+--
+
+INSERT INTO `tareas` (`idTarea`, `idUsuario`, `nombre`, `prioridad`, `fechaInicio`, `fechaFin`, `dia`) VALUES
+(1, 928902119, 'correr y caminar', 0, '2024-11-18T10:00', '2024-12-04T10:00', 'viernes');
 
 -- --------------------------------------------------------
 
@@ -78,6 +85,12 @@ INSERT INTO `usuarios` (`idUsuario`, `nombre`, `email`, `contraseña`) VALUES
 --
 
 --
+-- Indices de la tabla `tareas`
+--
+ALTER TABLE `tareas`
+  ADD PRIMARY KEY (`idTarea`);
+
+--
 -- Indices de la tabla `tiempo_uso`
 --
 ALTER TABLE `tiempo_uso`
@@ -86,6 +99,12 @@ ALTER TABLE `tiempo_uso`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `tareas`
+--
+ALTER TABLE `tareas`
+  MODIFY `idTarea` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tiempo_uso`

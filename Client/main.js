@@ -1,7 +1,6 @@
 import "./style.css";
 import { router } from "./src/router";
 import { createLogoutButton } from './src/logout.js';
-import { trackerData} from './src/saveTime.js';
 
 // Función principal para inicializar la aplicación
 async function initializeApp() {
@@ -20,6 +19,5 @@ async function initializeApp() {
    
   });
 }
- trackerData();
 // Llamar a la función de inicialización
 initializeApp();

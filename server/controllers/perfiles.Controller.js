@@ -18,11 +18,15 @@ async function obtenerTiempo(req, res) {
   }
 } 
 async function tiempo (req, res) {
-  const id = +req.user.id;
-  const { redSocial, startTime, endTime, duration } = req.body;
-
   try {
-    // 1. Basic Validation
+    if (!req.session || !req.user) {
+      return res.status(401).json({ message: "No autorizado. La sesión no es válida o el usuario no está definido." });
+    }
+
+    const id = req.user.id;
+    const { redSocial, startTime, endTime, duration } = req.body;
+
+    // Validación básica
     if (!startTime || !endTime) {
       return res.status(400).json({ message: "Faltan datos obligatorios (tiempo)." });
     }
@@ -30,37 +34,26 @@ async function tiempo (req, res) {
       return res.status(400).json({ message: "Nombre inválido. Debe ser una cadena no vacía." });
     }
 
-    // 2. Database Validation
-    
+    // Conectar a la base de datos y validar los datos
     try {
-      const connection = await connectDB(); // Assume connectDB() returns a database connection
-      // Use id to get existing profile:
-      const [session] = await connection.query(
-        'SELECT * FROM tiempo_uso WHERE idUsuario = ?',
-        [id] 
-      ); 
-    } catch (error) {
-      console.error("Error connecting to database:", error);
-      return res.status(500).json({ message: "Error interno del servidor al validar la base de datos." });
-    }
+      const connection = await connectDB();
+      const [session] = await connection.query('SELECT * FROM tiempo_uso WHERE idUsuario = ?', [id]);
 
-    // 3. Insert
-    try { 
+      // Insertar en la base de datos
       const [result] = await connection.query(
-          'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final, duracion) VALUES(?, ?, ?, ?, ?)',
-          [id, redSocial, startTime, endTime, duration]
+        'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final, duracion) VALUES(?, ?, ?, ?, ?)',
+        [id, redSocial, startTime, endTime, duration]
       );
       res.json({ message: "datos guardados", result });
     } catch (error) {
-      console.error("Error inserting into database:", error);
-      // Log the error and return an appropriate error response
-      res.status(500).json({ message: "Error interno del servidor al guardar datos." }); 
-    } 
+      console.error("Error al conectar/insertar en la base de datos:", error);
+      res.status(500).json({ message: "Error interno del servidor al procesar la base de datos." });
+    }
   } catch (error) {
-    console.error("General error:", error); 
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error general:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
   }
-} 
+}
 
   async function eliminar(req, res) {
     try {

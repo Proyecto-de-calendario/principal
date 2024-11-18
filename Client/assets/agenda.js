@@ -1,81 +1,60 @@
-import { loadTasks } from './loadTasks.js';
 import { saveTask } from '../src/saveTasks.js';
-import { editTask } from '../src/editTasks.js';
-import { deleteTask } from '../src/deleteTask.js';
+import { renderTasks } from '../src/renderTasks.js';
+import { loadTasks } from './loadTasks.js';
 
-export function agenda() {
-  document.addEventListener('DOMContentLoaded', async () => {
-    try {
-      const tasks = await loadTasks();
-      renderTasks(tasks);
-    } catch (error) {
-      console.error('Error al cargar las tareas:', error);
+export async function agenda(tasks) {
+  try {
+    if (!Array.isArray(tasks)) {
+      tasks = []; // Asegúrate de que tasks sea un array
     }
-  });
+    renderTasks(tasks); // Renderiza las tareas inicialmente
+  } catch (error) {
+    console.error('Error al cargar las tareas:', error);
+  }
 
   document.getElementById("open-modal").addEventListener('click', () => {
     document.getElementById('task-modal').classList.remove('hidden');
-    saveTask(); // Limpiar el formulario al abrir el modal
+    clearForm(); // Limpiar el formulario al abrir el modal
   });
-  
+
   document.querySelector('.close').addEventListener('click', () => {
     document.getElementById('task-modal').classList.add('hidden');
     clearForm();
   });
-  
+
   window.addEventListener('click', (e) => {
     if (e.target === document.getElementById('task-modal')) {
       document.getElementById('task-modal').classList.add('hidden');
       clearForm();
     }
   });
-  // Asegurarse de que el formulario llame a saveTask cuando se envíe
+
   document.getElementById('task-form').addEventListener('submit', async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto de enviar el formulario
-    await saveTask();  // Guardar la tarea después de que el usuario complete el formulario
-    document.getElementById('task-modal').classList.add('hidden'); // Cerrar el modal
-    clearForm(); // Limpiar el formulario
+
+    const taskData = {
+      name: document.getElementById('task-name').value,
+      priority: document.getElementById('task-priority').value,
+      startTime: document.getElementById('task-time-start').value,
+      endTime: document.getElementById('task-time-end').value,
+      date: document.getElementById('task-date').value,
+    };
+
+    try {
+      await saveTask(taskData); // Guardar la tarea después de que el usuario complete el formulario
+      document.getElementById('task-modal').classList.add('hidden'); // Cerrar el modal
+      clearForm(); // Limpiar el formulario
+
+      // Recargar las tareas después de guardar una nueva tarea
+      const newTasks = await loadTasks();
+      renderTasks(newTasks);
+    } catch (error) {
+      console.error('Error al guardar la tarea:', error);
+    }
   });
 }
-  
 
-  function clearForm() {
-    document.getElementById('task-id').value = '';
-    document.getElementById('task-form').reset();
-  }
-
-  function renderTasks(tasks) {
-    const taskList = document.getElementById('task-list');
-    taskList.innerHTML = ''; // Limpiar la lista antes de renderizar
-    tasks.forEach(task => {
-      const taskItem = document.createElement('div');
-      taskItem.className = 'task-item border p-4 mb-2 rounded'; // Estilo para el item
-      taskItem.innerHTML = `
-        <h3 class="text-lg font-semibold">${task.nombre}</h3>
-        <p><strong>Fecha Inicio:</strong> ${new Date(task.fechaInicio).toLocaleString()}</p>
-        <p><strong>Fecha Fin:</strong> ${new Date(task.fechaFin).toLocaleString()}</p>
-        <p><strong>Prioridad:</strong> ${task.prioridad}</p>
-        <p><strong>Día:</strong> ${task.dia}</p>
-        <div class="flex space-x-4">
-          <button class="edit-task bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50 transition ease-in-out duration-300" data-id="${task.idTarea}">
-            Editar
-          </button>
-          <button class="delete-task bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50 transition ease-in-out duration-300" data-id="${task.idTarea}">
-            Eliminar
-          </button>
-        </div>
-      `;
-      taskList.appendChild(taskItem);
-      taskItem.querySelector('.edit-task').addEventListener('click', () => editTask(task.idTarea));
-      taskItem.querySelector('.delete-task').addEventListener('click', async () => {
-        try {
-          await deleteTask(task.idTarea);
-          tasks = tasks.filter(t => t.idTarea !== task.idTarea);
-          renderTasks(tasks);
-          alert('Tarea eliminada exitosamente');
-        } catch (error) {
-          alert('Hubo un error al eliminar la tarea. Intenta nuevamente.');
-        }
-      });
-    });
-  }
+function clearForm() {
+  document.getElementById('task-id').value = '';
+  document.getElementById('task-form').reset();
+}
