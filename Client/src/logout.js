@@ -1,17 +1,21 @@
 export function createLogoutButton() {
   const navbar = document.querySelector("nav");
 
-  const logoutBtn = document.createElement("button");
-  logoutBtn.classList.add(
-    "bg-red-500",
-    "text-white",
-    "hover:bg-red-700"
-  );
-  logoutBtn.textContent = "Abandonar Sesión";
-  // navbar.appendChild(logoutBtn);
+  if (navbar) {
+    const logoutBtn = document.createElement("button");
+    logoutBtn.classList.add(
+      "bg-red-500",
+      "text-white",
+      "hover:bg-red-700"
+    );
+    logoutBtn.textContent = "Abandonar Sesión";
+    navbar.appendChild(logoutBtn); // Agregar el botón a la barra de navegación
 
-  // Manejar el clic del botón de logout
-  logoutBtn.addEventListener("click", handleLogout);
+    // Manejar el clic del botón de logout
+    logoutBtn.addEventListener("click", handleLogout);
+  } else {
+    console.error("No se encontró el elemento navbar");
+  }
 }
 
 async function handleLogout() {
