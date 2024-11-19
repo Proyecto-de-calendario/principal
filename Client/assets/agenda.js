@@ -32,9 +32,16 @@ export async function agenda(tasks) {
   document.getElementById('task-form').addEventListener('submit', async (e) => {
     e.preventDefault(); // Evitar el comportamiento por defecto de enviar el formulario
 
+    // Convertir la prioridad a un valor numérico
+    const priorityMapping = {
+      "alta": 2,
+      "media": 1,
+      "baja": 0
+    };
+
     const taskData = {
       name: document.getElementById('task-name').value,
-      priority: document.getElementById('task-priority').value,
+      priority: priorityMapping[document.getElementById('task-priority').value.toLowerCase()] || 0,
       startTime: document.getElementById('task-time-start').value,
       endTime: document.getElementById('task-time-end').value,
       date: document.getElementById('task-date').value,
