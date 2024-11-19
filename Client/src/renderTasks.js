@@ -1,3 +1,6 @@
+import {editTask} from './editTasks';
+import {deleteTask} from './deleteTask';
+
 export function renderTasks(tasks) {
   const taskList = document.getElementById('task-list');
   if (!taskList) {
