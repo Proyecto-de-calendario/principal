@@ -12,7 +12,6 @@ export const timeData = async () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const responseData = await response.json();
-      console.log('Datos recibidos:', responseData);
       return responseData;
     } catch (error) {
       console.error('Error al obtener datos del servidor:', error);

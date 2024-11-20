@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-11-2024 a las 02:12:42
+-- Tiempo de generación: 20-11-2024 a las 23:11:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -42,7 +42,8 @@ CREATE TABLE `tareas` (
 --
 
 INSERT INTO `tareas` (`idTarea`, `idUsuario`, `nombre`, `prioridad`, `fechaInicio`, `fechaFin`, `dia`) VALUES
-(1, 928902119, 'correr y caminar', 0, '2024-11-18T10:00', '2024-12-04T10:00', 'viernes');
+(1, 928902119, 'correr y caminar', 0, '2024-11-18T10:00', '2024-12-04T10:00', 'viernes'),
+(2, 928902119, 'estudiar', 0, '2024-11-21T00:00', '2024-11-28T10:00', 'jueves');
 
 -- --------------------------------------------------------
 
@@ -51,11 +52,12 @@ INSERT INTO `tareas` (`idTarea`, `idUsuario`, `nombre`, `prioridad`, `fechaInici
 --
 
 CREATE TABLE `tiempo_uso` (
-  `id_usuario` int(10) NOT NULL,
+  `idUsuario` int(10) NOT NULL,
   `id_sesion` int(11) NOT NULL,
   `red_social` varchar(20) NOT NULL,
   `tiempo_inicio` datetime NOT NULL,
-  `tiempo_final` datetime NOT NULL
+  `tiempo_final` datetime NOT NULL,
+  `duracion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -104,7 +106,7 @@ ALTER TABLE `tiempo_uso`
 -- AUTO_INCREMENT de la tabla `tareas`
 --
 ALTER TABLE `tareas`
-  MODIFY `idTarea` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idTarea` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `tiempo_uso`

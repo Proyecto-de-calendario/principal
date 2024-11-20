@@ -1,6 +1,6 @@
 import { loginPage } from "./loginPage.js";
 import { logupPage } from "./logupPage.js";
-import { initCalendar, showModal, closeModal, bindCloseModalEvent } from "../assets/chart(calendar).js";
+import { initCalendar } from "../assets/chart(calendar).js";
 import { grafico } from "../assets/charts(date).js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
 import { isValidSession } from "../session.js";
@@ -41,44 +41,30 @@ export async function router(path, app) {
       await loadPage('/pages/agenda.html', app);
       try {
         const tasksData = await loadTasks();
-        renderCalendar(tasksData);
         agenda(tasksData);
+        renderCalendar(tasksData); // Asegurémonos de pasar las tareas a renderCalendar
       } catch (error) {
         console.error('Error al cargar las tareas:', error);
       }
       break;
-    case "/estadisticas":
-    case "/pages/estadistica.html":
-      await loadPage('/pages/estadistica.html', app);
-      try {
-        const estadistica = await timeData();
-        console.log('Datos de estadística:', estadistica);
-        if (estadistica) {
-          grafico(estadistica); // Llama a la función grafico con los datos obtenidos
+    case "/estadisticas": case "/pages/estadistica.html":
+       await loadPage('/pages/estadistica.html', app);
+        try { const estadistica = await timeData();
+      if (estadistica && Array.isArray(estadistica)) { // Inicializar calendario con los datos obtenidos 
+        const calendarEl = document.getElementById("calendar"); 
+        if (calendarEl) { 
+          initCalendar(calendarEl, (selectedDateData) => {
+            grafico(selectedDateData);
+             }, estadistica);
+             } else {
+               console.error("No se encontró el elemento 'calendar' en estadistica.html");
+               } 
+              } else { console.error("No se recibieron datos de estadísticas");
 
-          // Inicializar calendario con los datos obtenidos
-          const calendarEl = document.getElementById("calendar");
-          if (calendarEl) {
-            initCalendar(calendarEl, (date) => {
-              // Filtra los datos por la fecha seleccionada y actualiza el gráfico
-              const filteredData = estadistica.filter(item => item.tiempo_inicio.startsWith(date));
-              grafico(filteredData);
-              showModal(date);
-            });
-          } else {
-            console.error("No se encontró el elemento 'calendar' en estadistica.html");
-          }
-
-          // Manejo de modales
-          showModal();
-          closeModal();
-          bindCloseModalEvent();
-        } else {
-          console.error("No se recibieron datos de estadísticas");
-        }
-      } catch (error) {
-        console.error('Error al cargar las estadísticas:', error);
-      }
+                }
+               } catch (error) {
+                 console.error('Error al cargar las estadísticas:', error);
+                 } 
       break;
     case "/nosotros":
     case "/pages/about.html":
