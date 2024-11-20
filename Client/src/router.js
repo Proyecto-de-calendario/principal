@@ -5,12 +5,14 @@ import { grafico } from "../assets/charts(date).js";
 import { limiteTiempo } from "../assets/limitetiempo.js";
 import { isValidSession } from "../session.js";
 import { agenda } from "../assets/agenda.js";
-import { renderCalendar } from "../assets/calendar.js"; // Ajustado aquí
+import { renderCalendar } from "../assets/calendar.js";
 import { trackerData } from "./saveTime.js";
 import { loadTasks } from "../assets/loadTasks.js";
+import { timeData } from "../assets/timedata.js";
 
 export async function router(path, app) {
   app.innerHTML = ''; // Limpiar contenido anterior
+
   // Verificar sesión para rutas protegidas
   const protectedRoutes = ["/tiempo", "/agenda", "/estadisticas"];
   if (protectedRoutes.includes(path) && !(await isValidSession())) {
@@ -38,10 +40,9 @@ export async function router(path, app) {
     case "/pages/agenda.html":
       await loadPage('/pages/agenda.html', app);
       try {
-        const tasksData = await loadTasks(); // Obtén las tareas de forma asíncrona
-        renderCalendar(tasksData), // Renderiza el calendario con tareas
-        agenda(tasksData); // Llama a agenda con las tareas obtenidas
-        
+        const tasksData = await loadTasks();
+        renderCalendar(tasksData);
+        agenda(tasksData);
       } catch (error) {
         console.error('Error al cargar las tareas:', error);
       }
@@ -49,24 +50,35 @@ export async function router(path, app) {
     case "/estadisticas":
     case "/pages/estadistica.html":
       await loadPage('/pages/estadistica.html', app);
+      try {
+        const estadistica = await timeData();
+        console.log('Datos de estadística:', estadistica);
+        if (estadistica) {
+          grafico(estadistica); // Llama a la función grafico con los datos obtenidos
 
-      // Inicializar calendario
-      const calendarEl = document.getElementById("calendar");
-      if (calendarEl) {
-        initCalendar(calendarEl, (date) => {
-          console.log(`Fecha seleccionada: ${date}`);
-        });
-      } else {
-        console.error("No se encontró el elemento 'calendar' en estadistica.html");
+          // Inicializar calendario con los datos obtenidos
+          const calendarEl = document.getElementById("calendar");
+          if (calendarEl) {
+            initCalendar(calendarEl, (date) => {
+              // Filtra los datos por la fecha seleccionada y actualiza el gráfico
+              const filteredData = estadistica.filter(item => item.tiempo_inicio.startsWith(date));
+              grafico(filteredData);
+              showModal(date);
+            });
+          } else {
+            console.error("No se encontró el elemento 'calendar' en estadistica.html");
+          }
+
+          // Manejo de modales
+          showModal();
+          closeModal();
+          bindCloseModalEvent();
+        } else {
+          console.error("No se recibieron datos de estadísticas");
+        }
+      } catch (error) {
+        console.error('Error al cargar las estadísticas:', error);
       }
-
-      // Manejo de modales
-      showModal();
-      closeModal();
-      bindCloseModalEvent();
-
-      // Generar gráficos
-      grafico();
       break;
     case "/nosotros":
     case "/pages/about.html":
@@ -77,7 +89,6 @@ export async function router(path, app) {
       break;
   }
 
-  // Verificar la sesión antes de ejecutar trackerData
   const sessionValid = await isValidSession();
   if (sessionValid) {
     trackerData();

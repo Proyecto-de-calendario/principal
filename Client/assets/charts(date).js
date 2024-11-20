@@ -1,15 +1,13 @@
-import {Chart, registerables} from 'chart.js';
-// Función principal para renderizar los gráficos con datos de la fecha seleccionada
-export const grafico = (date) => {
+import { Chart, registerables } from 'chart.js';
 
+export const grafico = (data) => {
   Chart.register(...registerables);
-  //Obtener datos filtrados para la fecha seleccionada
-  const filteredData = fetchDataByDate(date);
-  
-  // Seleccionar los elementos canvas donde se renderizarán los gráficos
+
+  // Filtrar datos según la fecha seleccionada
+  const filteredData = fetchDataByDate(data);
+
   const ctx1 = document.getElementById("tiempoRedesChart").getContext("2d");
   const ctx2 = document.getElementById("lineaTiempoSemanalChart").getContext("2d");
-
 
   // Crear el gráfico de pie para la distribución de tiempo en redes sociales
   window.chart1 = new Chart(ctx1, {
@@ -17,7 +15,7 @@ export const grafico = (date) => {
     data: filteredData.pieChartData,
     options: {
       responsive: false,
-      maintainAspectRatio: false, // Importante para el tamaño dinámico
+      maintainAspectRatio: false,
     },
   });
 
@@ -27,7 +25,7 @@ export const grafico = (date) => {
     data: filteredData.lineChartData,
     options: {
       responsive: false,
-      maintainAspectRatio: false, // Ajuste para responsividad
+      maintainAspectRatio: false,
       scales: {
         x: {
           type: 'linear',
@@ -56,30 +54,37 @@ export const grafico = (date) => {
 }
 
 // Función para obtener datos filtrados por fecha (simulada)
-function fetchDataByDate(date) {
+function fetchDataByDate(data) {
+  const socialNetworks = [...new Set(data.map(item => item.red_social))];
+  const pieChartData = {
+    labels: socialNetworks,
+    datasets: [{
+      label: 'Tiempo en redes (%)',
+      data: socialNetworks.map(network => {
+        return data.filter(item => item.red_social === network).reduce((acc, item) => acc + item.duracion, 0);
+      }),
+      backgroundColor: ['#6366F1', '#A78BFA', '#EC4899', '#F59E0B', '#10B981'],
+      borderWidth: 1
+    }]
+  };
+
+  const lineChartData = {
+    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+    datasets: socialNetworks.map((network, idx) => ({
+      label: network,
+      data: data.filter(item => item.red_social === network).map(item => ({
+        x: new Date(item.tiempo_inicio).getHours() + new Date(item.tiempo_inicio).getMinutes() / 60,
+        y: idx + 1
+      })),
+      borderColor: ['#6366F1', '#A78BFA', '#EC4899', '#F59E0B', '#10B981'][idx],
+      fill: false,
+      tension: 0.4,
+      pointRadius: 0
+    }))
+  };
+
   return {
-    pieChartData: {
-      labels: ['Instagram', 'Facebook', 'Twitter', 'TikTok', 'Otros'],
-      datasets: [{
-        label: 'Tiempo en redes (%)',
-        data: [35, 25, 15, 20, 5],
-        backgroundColor: ['#6366F1', '#A78BFA', '#EC4899', '#F59E0B', '#10B981'],
-        borderWidth: 1
-      }]
-    },
-    lineChartData: {
-      labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-      datasets: [
-        {
-          label: 'Instagram',
-          data: [0, 1, 1, 0, 0, 0, 1, 0, 0, 1],
-          borderColor: '#6366F1',
-          fill: false,
-          tension: 0.4,
-          pointRadius: 0
-        },
-        // Añadir más datasets para otras redes sociales según sea necesario
-      ]
-    }
+    pieChartData,
+    lineChartData
   };
 }

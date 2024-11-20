@@ -19,30 +19,25 @@ async function obtenerTiempo(req, res) {
 } 
 async function tiempo (req, res) {
   try {
-    if (!req.session || !req.user) {
-      return res.status(401).json({ message: "No autorizado. La sesión no es válida o el usuario no está definido." });
-    }
-
     const id = req.user.id;
-    const { redSocial, startTime, endTime, duration } = req.body;
-
+    const { socialNetwork, startTime, endTime, duration } = req.body;
+console.log(req.body);
     // Validación básica
     if (!startTime || !endTime) {
       return res.status(400).json({ message: "Faltan datos obligatorios (tiempo)." });
     }
-    if (typeof redSocial !== 'string' || redSocial.trim() === '') {
+    if (typeof socialNetwork !== 'string' || socialNetwork.trim() === '') {
       return res.status(400).json({ message: "Nombre inválido. Debe ser una cadena no vacía." });
     }
 
     // Conectar a la base de datos y validar los datos
     try {
       const connection = await connectDB();
-      const [session] = await connection.query('SELECT * FROM tiempo_uso WHERE idUsuario = ?', [id]);
 
       // Insertar en la base de datos
       const [result] = await connection.query(
         'INSERT INTO tiempo_uso(idUsuario, red_social, tiempo_inicio, tiempo_final, duracion) VALUES(?, ?, ?, ?, ?)',
-        [id, redSocial, startTime, endTime, duration]
+        [id, socialNetwork, startTime, endTime, duration]
       );
       res.json({ message: "datos guardados", result });
     } catch (error) {

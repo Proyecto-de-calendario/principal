@@ -32,7 +32,7 @@ export const sendData = async (data) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data }),
+        body: JSON.stringify( data ),
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
