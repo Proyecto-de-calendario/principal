@@ -9,6 +9,14 @@ export const grafico = (data) => {
   const ctx1 = document.getElementById("tiempoRedesChart").getContext("2d");
   const ctx2 = document.getElementById("lineaTiempoSemanalChart").getContext("2d");
 
+  // Destruir gráficos existentes antes de crear nuevos
+  if (window.chart1) {
+    window.chart1.destroy();
+  }
+  if (window.chart2) {
+    window.chart2.destroy();
+  }
+
   // Crear el gráfico de pie para la distribución de tiempo en redes sociales
   window.chart1 = new Chart(ctx1, {
     type: "pie",
@@ -39,7 +47,7 @@ export const grafico = (data) => {
         },
         y: {
           ticks: {
-            stepSize: 1,
+            stepSize: 0.5,
             beginAtZero: true,
             max: 5
           },
@@ -51,7 +59,8 @@ export const grafico = (data) => {
       }
     },
   });
-}
+};
+
 
 // Función para obtener datos filtrados por fecha (simulada)
 function fetchDataByDate(data) {
@@ -59,11 +68,11 @@ function fetchDataByDate(data) {
   const pieChartData = {
     labels: socialNetworks,
     datasets: [{
-      label: 'Tiempo en redes (%)',
+      label: 'Tiempo en redes',
       data: socialNetworks.map(network => {
         return data.filter(item => item.red_social === network).reduce((acc, item) => acc + item.duracion, 0);
       }),
-      backgroundColor: ['#6366F1', '#A78BFA', '#EC4899', '#F59E0B', '#10B981'],
+      backgroundColor: ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD'], // Colores más distintivos
       borderWidth: 1
     }]
   };
@@ -74,9 +83,9 @@ function fetchDataByDate(data) {
       label: network,
       data: data.filter(item => item.red_social === network).map(item => ({
         x: new Date(item.tiempo_inicio).getHours() + new Date(item.tiempo_inicio).getMinutes() / 60,
-        y: idx + 1
+        y: (idx + 1) * 0.5 // Líneas más juntas en el eje Y
       })),
-      borderColor: ['#6366F1', '#A78BFA', '#EC4899', '#F59E0B', '#10B981'][idx],
+      borderColor: ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD'][idx], // Colores más distintivos
       fill: false,
       tension: 0.4,
       pointRadius: 0
