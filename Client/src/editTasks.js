@@ -13,7 +13,6 @@ export async function editTask(id) {
     }
 
     const task = await response.json();
-
     document.getElementById('task-date').value = task[0].dia;
     document.getElementById('task-time-start').value = task[0].fechaInicio;
     document.getElementById('task-time-end').value = task[0].fechaFin;
@@ -39,7 +38,6 @@ export async function editTask(id) {
         endTime: document.getElementById('task-time-end').value,
         date: document.getElementById('task-date').value,
       };
-
       await updateTask(taskData);
     }
   } catch (error) {
