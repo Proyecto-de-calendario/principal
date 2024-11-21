@@ -43,12 +43,12 @@ async function login(req, res) {
 
 async function createUser(req, res) {
   try{
-  const { nombre, email, password } = req.body;
+  const { name, email, password } = req.body;
   const id = Math.floor(Math.random() * Math.pow(10, 9));
   const hashContrasenia = hashSync(password, 10);
     const connection = await connectDB(); // Asegúrate de conectar a la base de datos
     const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
-    const [rows] = await connection.query(sql, [id, nombre, email, hashContrasenia]);
+    const [rows] = await connection.query(sql, [id, name, email, hashContrasenia]);
     const user = rows;
 
     res.json({
@@ -56,12 +56,6 @@ async function createUser(req, res) {
     });
 
     connection.end();
-
-    // Validación de usuario
-    if (user.length === 0) {
-      return res.status(401).json({ message: "no existe el usuario" });
-    }
-    
     if (user.contraseña === hashContrasenia) {
       // Generar token JWT
       const token = await generateJWT(user.idUsuario);
