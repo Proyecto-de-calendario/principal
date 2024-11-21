@@ -4,10 +4,9 @@ import {validateTokenJWT} from '../helpers/validateToken.js';
 import {connectDB} from '../dataBase.js'; // Importa la función para conectar a la base de datos
 
 async function login(req, res) {
+  try{
   const { email, password } = req.body;
   const sql = "SELECT * FROM usuarios WHERE email = ?";
-
-  try {
     const connection = await connectDB();
     const [rows] = await connection.query(sql, [email]);
     const user = rows[0];
@@ -43,11 +42,10 @@ async function login(req, res) {
 }
 
 async function createUser(req, res) {
+  try{
   const { nombre, email, password } = req.body;
   const id = Math.floor(Math.random() * Math.pow(10, 9));
   const hashContrasenia = hashSync(password, 10);
-
-  try {
     const connection = await connectDB(); // Asegúrate de conectar a la base de datos
     const sql = 'INSERT INTO usuarios (idUsuario, nombre, email, contraseña) VALUES (?, ?, ?, ?)';
     const [rows] = await connection.query(sql, [id, nombre, email, hashContrasenia]);
@@ -84,9 +82,8 @@ async function createUser(req, res) {
 }
 
   async function removeUser (req, res) {
-    
+   try { 
       const id = +req.params.id;
-  try {
         // Tomamos el token desde los headers de la peticion de la siguiente manera:
     const token = req.headers.token;
 
@@ -110,9 +107,8 @@ async function createUser(req, res) {
   }
 
   async function verifyUser (req, res) {
+    try{
     const { email, password } = req.body;
-    
-    try {
       const connection = await connectDB(); 
   
       // 3. Insert Query
