@@ -1,6 +1,7 @@
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es'; // Importar idioma español
 
 export const initCalendar = (calendarEl, onDateClick, data) => {
   if (!calendarEl) {
@@ -37,6 +38,7 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
   const calendar = new Calendar(calendarEl, {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: "dayGridMonth",
+    locale: esLocale, // Configurar idioma a español
     events,
     dateClick: (info) => {
       if (typeof onDateClick === "function") {
@@ -46,8 +48,12 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
         onDateClick(selectedDateData);
       }
     },
+    headerToolbar: {
+      left: 'prev,next today', // Mantener la barra con el botón "Hoy"
+      center: 'title',
+      right: 'dayGridMonth', // Vista mensual
+    },
   });
 
   calendar.render();
 };
-

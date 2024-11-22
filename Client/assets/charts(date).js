@@ -47,6 +47,19 @@ export const grafico = (data) => {
     options: {
       responsive: false,
       maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const hourDecimal = context.raw.x; // Valor decimal de la hora
+              const hours = Math.floor(hourDecimal);
+              const minutes = Math.round((hourDecimal - hours) * 60);
+              const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`; // Formato HH:mm
+              return `${context.dataset.label}: ${time}`; // Mostrar solo el nombre de la red y el tiempo
+            },
+          },
+        },
+      },
       scales: {
         x: {
           type: 'linear',
@@ -56,7 +69,11 @@ export const grafico = (data) => {
             text: 'Hora del día',
           },
           ticks: {
-            callback: value => `${Math.floor(value)}:00`, // Mostrar horas completas
+            callback: value => {
+              const hours = Math.floor(value);
+              const minutes = Math.round((value - hours) * 60);
+              return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            },
           },
           min: 0,
           max: 24,
