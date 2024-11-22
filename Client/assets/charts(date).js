@@ -18,82 +18,127 @@ export const grafico = (data) => {
   }
 
   // Crear el gráfico de pie para la distribución de tiempo en redes sociales
-  window.chart1 = new Chart(ctx1, {
-    type: "pie",
-    data: filteredData.pieChartData,
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
+window.chart1 = new Chart(ctx1, {
+  type: "pie",
+  data: filteredData.pieChartData,
+  options: {
+    responsive: false,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            // Convertir los minutos a formato "Xh Ym"
+            const hours = Math.floor(value / 60);
+            const minutes = Math.round(value % 60);
+            const timeFormatted = `${hours}h ${minutes}m`;
+            return `${label}: ${timeFormatted}`; // Mostrar el nombre de la red y el tiempo en formato "Xh Ym"
+          },
+        },
+      },
     },
-  });
+  },
+});
+
 
   // Crear el gráfico de línea para el uso a lo largo del día
   window.chart2 = new Chart(ctx2, {
     type: "line",
-    data: filteredData.lineChartData,
+    data: {
+      datasets: filteredData.lineChartData.datasets,
+    },
     options: {
       responsive: false,
       maintainAspectRatio: false,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const hourDecimal = context.raw.x; // Valor decimal de la hora
+              const hours = Math.floor(hourDecimal);
+              const minutes = Math.round((hourDecimal - hours) * 60);
+              const time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`; // Formato HH:mm
+              return `${context.dataset.label}: ${time}`; // Mostrar solo el nombre de la red y el tiempo
+            },
+          },
+        },
+      },
       scales: {
         x: {
           type: 'linear',
           position: 'bottom',
           title: {
             display: true,
-            text: 'Hora del día'
+            text: 'Hora del día',
+          },
+          ticks: {
+            callback: value => {
+              const hours = Math.floor(value);
+              const minutes = Math.round((value - hours) * 60);
+              return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            },
           },
           min: 0,
-          max: 24
+          max: 24,
         },
         y: {
-          ticks: {
-            stepSize: 0.5,
-            beginAtZero: true,
-            max: 5
-          },
+          type: 'category',
+          labels: filteredData.pieChartData.labels, // Mostrar nombres de redes sociales en el eje Y
           title: {
             display: true,
-            text: 'Red Social'
-          }
-        }
-      }
+            text: 'Red Social',
+          },
+        },
+      },
     },
   });
 };
 
-
 // Función para obtener datos filtrados por fecha (simulada)
 function fetchDataByDate(data) {
   const socialNetworks = [...new Set(data.map(item => item.red_social))];
+  const colors = ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD', '#8C564B', '#E377C2']; // Paleta de colores
+
   const pieChartData = {
     labels: socialNetworks,
     datasets: [{
       label: 'Tiempo en redes',
       data: socialNetworks.map(network => {
-        return data.filter(item => item.red_social === network).reduce((acc, item) => acc + item.duracion, 0);
+        return data
+          .filter(item => item.red_social === network)
+          .reduce((acc, item) => {
+            const start = new Date(item.tiempo_inicio);
+            const end = new Date(item.tiempo_final);
+            const duration = (end - start) / 60000; // Duración en minutos
+            return acc + duration;
+          }, 0);
       }),
-      backgroundColor: ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD'], // Colores más distintivos
-      borderWidth: 1
-    }]
+      backgroundColor: socialNetworks.map((_, idx) => colors[idx % colors.length]), // Asignar colores por red
+      borderWidth: 1,
+    }],
   };
 
   const lineChartData = {
-    labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
     datasets: socialNetworks.map((network, idx) => ({
       label: network,
-      data: data.filter(item => item.red_social === network).map(item => ({
-        x: new Date(item.tiempo_inicio).getHours() + new Date(item.tiempo_inicio).getMinutes() / 60,
-        y: (idx + 1) * 0.5 // Líneas más juntas en el eje Y
-      })),
-      borderColor: ['#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', '#9467BD'][idx], // Colores más distintivos
+      data: data
+        .filter(item => item.red_social === network)
+        .map(item => ({
+          x: new Date(item.tiempo_inicio).getHours() + new Date(item.tiempo_inicio).getMinutes() / 60,
+          y: network, // Usar el nombre de la red social para el eje Y
+        })),
+      borderColor: colors[idx % colors.length], // Colores consistentes
+      backgroundColor: colors[idx % colors.length],
       fill: false,
       tension: 0.4,
-      pointRadius: 0
-    }))
+      pointRadius: 3,
+    })),
   };
 
   return {
     pieChartData,
-    lineChartData
+    lineChartData,
   };
 }

@@ -1,6 +1,7 @@
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es'; // Importar idioma español
 
 export const initCalendar = (calendarEl, onDateClick, data) => {
   if (!calendarEl) {
@@ -19,6 +20,13 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
     return acc;
   }, {});
 
+  // Función para convertir minutos a horas y minutos
+  const convertMinutesToHM = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}min`;
+  };
+
   // Crear eventos con colores según la duración
   const events = Object.entries(durationsByDay).map(([date, totalDuration]) => {
     let color;
@@ -27,7 +35,7 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
     else color = "#EF4444"; // Rojo para más de 3 horas
 
     return {
-      title: `${Math.round(totalDuration)} min`, // Mostrar duración total
+      title: `${convertMinutesToHM(Math.round(totalDuration))}`, // Mostrar duración total en horas y minutos
       start: date,
       backgroundColor: color,
       borderColor: color,
@@ -37,6 +45,7 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
   const calendar = new Calendar(calendarEl, {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: "dayGridMonth",
+    locale: esLocale, // Configurar idioma a español
     events,
     dateClick: (info) => {
       if (typeof onDateClick === "function") {
@@ -46,8 +55,12 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
         onDateClick(selectedDateData);
       }
     },
+    headerToolbar: {
+      left: 'prev,next today', // Mantener la barra con el botón "Hoy"
+      center: 'title',
+      right: 'dayGridMonth', // Vista mensual
+    },
   });
 
   calendar.render();
 };
-
