@@ -4,9 +4,8 @@ export function createLogoutButton() {
   if (navbar) {
     const logoutBtn = document.createElement("button");
     logoutBtn.classList.add(
-      "bg-red-500",
-      "text-white",
-      "hover:bg-red-700"
+      "text-red-500",
+      "hover:bg-red-300"
     );
     logoutBtn.textContent = "Abandonar Sesión";
     navbar.appendChild(logoutBtn); // Agregar el botón a la barra de navegación
