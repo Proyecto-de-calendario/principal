@@ -20,6 +20,13 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
     return acc;
   }, {});
 
+  // Función para convertir minutos a horas y minutos
+  const convertMinutesToHM = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}min`;
+  };
+
   // Crear eventos con colores según la duración
   const events = Object.entries(durationsByDay).map(([date, totalDuration]) => {
     let color;
@@ -28,7 +35,7 @@ export const initCalendar = (calendarEl, onDateClick, data) => {
     else color = "#EF4444"; // Rojo para más de 3 horas
 
     return {
-      title: `${Math.round(totalDuration)} min`, // Mostrar duración total
+      title: `${convertMinutesToHM(Math.round(totalDuration))}`, // Mostrar duración total en horas y minutos
       start: date,
       backgroundColor: color,
       borderColor: color,

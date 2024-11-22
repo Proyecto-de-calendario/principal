@@ -18,25 +18,30 @@ export const grafico = (data) => {
   }
 
   // Crear el gráfico de pie para la distribución de tiempo en redes sociales
-  window.chart1 = new Chart(ctx1, {
-    type: "pie",
-    data: filteredData.pieChartData,
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function (context) {
-              const label = context.label || '';
-              const value = context.raw || 0;
-              return `${label}: ${value.toFixed(2)} minutos`; // Mostrar con 2 decimales
-            },
+window.chart1 = new Chart(ctx1, {
+  type: "pie",
+  data: filteredData.pieChartData,
+  options: {
+    responsive: false,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            // Convertir los minutos a formato "Xh Ym"
+            const hours = Math.floor(value / 60);
+            const minutes = Math.round(value % 60);
+            const timeFormatted = `${hours}h ${minutes}m`;
+            return `${label}: ${timeFormatted}`; // Mostrar el nombre de la red y el tiempo en formato "Xh Ym"
           },
         },
       },
     },
-  });
+  },
+});
+
 
   // Crear el gráfico de línea para el uso a lo largo del día
   window.chart2 = new Chart(ctx2, {
